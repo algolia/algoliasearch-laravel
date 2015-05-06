@@ -1,6 +1,6 @@
 <?php namespace Algolia\AlgoliasearchLaravel;
 
-use AlgoliaSearch\Client;
+use Vinkla\Algolia\AlgoliaManager;
 
 class EloquentSuscriber
 {
@@ -26,11 +26,6 @@ class EloquentSuscriber
 
         /** @var \AlgoliaSearch\Index $index */
         $index = $this->algolia->initIndex($this->getIndexName($model));
-
-        echo '<pre>';
-        print_r($model->toArray());
-        die();
-
 
         $index->addObject($model->toArray(), $model->getKey());
     }
