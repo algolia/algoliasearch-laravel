@@ -5,6 +5,7 @@ use Vinkla\Algolia\AlgoliaManager;
 class EloquentSuscriber
 {
     private static $trait_name = 'Algolia\AlgoliasearchLaravel\AlgoliaEloquentTrait';
+    private static $method_get_name = 'getAlgoliaRecord';
 
     private $algolia;
 
@@ -21,20 +22,23 @@ class EloquentSuscriber
 
     public function saved($model)
     {
-        if (! isset(class_uses($model)[static::$trait_name]) && $this->auto_index == false)
+        if (! isset(class_uses($model)[static::$trait_name]) || $model->auto_index == false)
             return true;
 
         /** @var \AlgoliaSearch\Index $index */
         $index = $this->algolia->initIndex($this->getIndexName($model));
 
-        $index->addObject($model->toArray(), $model->getKey());
+        if (method_exists($model, static::$method_get_name))
+            $index->addObject($model->{static::$method_get_name}(), $model->getKey());
+        else
+            $index->addObject($model->toArray(), $model->getKey());
 
         return true;
     }
 
     public function deleted($model)
     {
-        if (! isset(class_uses($model)[static::$trait_name]) && $this->auto_delete == false)
+        if (! isset(class_uses($model)[static::$trait_name]) || $model->auto_delete == false)
             return true;
 
         /** @var \AlgoliaSearch\Index $index */

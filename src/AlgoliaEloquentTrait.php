@@ -3,7 +3,7 @@
 Trait AlgoliaEloquentTrait
 {
     public $auto_index = true;
-    public $auto_remove = true;
+    public $auto_delete = true;
 
     public function reindex()
     {
