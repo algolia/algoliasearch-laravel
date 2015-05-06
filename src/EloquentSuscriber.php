@@ -28,6 +28,8 @@ class EloquentSuscriber
         $index = $this->algolia->initIndex($this->getIndexName($model));
 
         $index->addObject($model->toArray(), $model->getKey());
+
+        return true;
     }
 
     public function deleted($model)
