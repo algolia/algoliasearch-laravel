@@ -1,50 +1,35 @@
 <?php namespace Algolia\AlgoliasearchLaravel;
 
-use Vinkla\Algolia\AlgoliaManager;
-
 class EloquentSuscriber
 {
-    private static $trait_name = 'Algolia\AlgoliasearchLaravel\AlgoliaEloquentTrait';
-    private static $method_get_name = 'getAlgoliaRecord';
+    private $model_helper;
 
-    private $algolia;
-
-    public function __construct(AlgoliaManager $algolia)
+    public function __construct(ModelHelper $model_helper)
     {
-        $this->algolia = $algolia;
+        $this->model_helper = $model_helper;
     }
-
-    private function getIndexName($model)
-    {
-        return $model->getTable();
-    }
-
 
     public function saved($model)
     {
-        if (! isset(class_uses($model)[static::$trait_name]) || $model->auto_index == false)
+        if ($this->model_helper->isAutoIndex($model))
             return true;
 
         /** @var \AlgoliaSearch\Index $index */
-        $index = $this->algolia->initIndex($this->getIndexName($model));
-
-        if (method_exists($model, static::$method_get_name))
-            $index->addObject($model->{static::$method_get_name}(), $model->getKey());
-        else
-            $index->addObject($model->toArray(), $model->getKey());
+        foreach ($this->model_helper->getIndices($model) as $index);
+            if ($this->model_helper->indexOnly($model, $index->indexName))
+                $index->addObject($this->model_helper->getAlgoliaRecord($model), $this->model_helper->getKey($model));
 
         return true;
     }
 
     public function deleted($model)
     {
-        if (! isset(class_uses($model)[static::$trait_name]) || $model->auto_delete == false)
+        if ($this->model_helper->isAutoDelete($model))
             return true;
 
         /** @var \AlgoliaSearch\Index $index */
-        $index = $this->algolia->initIndex($this->getIndexName($model));
-
-        $index->deleteObject($model->id);
+        foreach ($this->model_helper->getIndices($model) as $index);
+            $index->deleteObject($model->id);
 
         return true;
     }
