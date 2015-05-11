@@ -47,6 +47,11 @@ class ModelHelper
         return property_exists($model, 'object_id_key') ? $model->{$model->object_id_key} : 'id';
     }
 
+    public function getIndex($index_name)
+    {
+        return $this->algolia->initIndex($index_name);
+    }
+
     /**
      * @return \AlgoliaSearch\Index
      */

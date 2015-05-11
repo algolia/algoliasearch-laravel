@@ -46,6 +46,27 @@ Trait AlgoliaEloquentTrait
             $index->clearIndex();
     }
 
+    public function _search($query, $parameters = [])
+    {
+        /** @var \Algolia\AlgoliasearchLaravel\ModelHelper $model_helper */
+        $model_helper = \App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
+
+        $index = null;
+
+        if (isset($parameters['index']))
+        {
+            $index = $model_helper->getIndex($parameters['index']);
+            unset($parameters['index']);
+        }
+        else
+            $index = $model_helper->getIndices($this)[0];
+
+        $result = $index->search($query, ['hitsPerPage' => 0]);
+
+        return $result;
+    }
+
+
     public static function __callStatic($method, $parameters)
     {
         $instance = new static();
@@ -53,7 +74,7 @@ Trait AlgoliaEloquentTrait
         $method = '_'.$method;
 
         if (method_exists($instance, $method));
-            return $instance->$method();
+            return call_user_func_array([$instance, $method], $parameters);
 
         return parent::__callStatic($method, $parameters);
     }
@@ -104,6 +125,4 @@ Trait AlgoliaEloquentTrait
         foreach ($indices as $index)
             $index->deleteObject($this->id);
     }
-
-
 }
