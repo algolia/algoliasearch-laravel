@@ -24,12 +24,12 @@ class ModelHelper
 
     public function isAutoIndex(Model $model)
     {
-        return ($this->hasAlgoliaTrait($model) && $model->auto_index == true);
+        return ($this->hasAlgoliaTrait($model) && ($model->auto_index === true || $model->auto_index === null));
     }
 
     public function isAutoDelete(Model $model)
     {
-        return ($this->hasAlgoliaTrait($model) && $model->auto_delete == true);
+        return ($this->hasAlgoliaTrait($model) && ($model->auto_delete === true || $model->auto_delete === null));
     }
 
     public function getKey(Model $model)
