@@ -11,7 +11,7 @@ class EloquentSuscriber
 
     public function saved($model)
     {
-        if ($this->model_helper->isAutoIndex($model))
+        if (! $this->model_helper->isAutoIndex($model))
             return true;
 
         /** @var \AlgoliaSearch\Index $index */
@@ -24,7 +24,7 @@ class EloquentSuscriber
 
     public function deleted($model)
     {
-        if ($this->model_helper->isAutoDelete($model))
+        if (! $this->model_helper->isAutoDelete($model))
             return true;
 
         /** @var \AlgoliaSearch\Index $index */
