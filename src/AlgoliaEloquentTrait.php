@@ -93,7 +93,7 @@ Trait AlgoliaEloquentTrait
             $record = $this->toArray();
 
         if (isset($record['objectID']) == false)
-            $record['objectID'] = $model_helper->getObjectIdKey($this);
+            $record['objectID'] = $model_helper->getObjectId($this);
 
         return $record;
     }

@@ -42,9 +42,14 @@ class ModelHelper
         return ! method_exists($model, 'indexOnly') || $model->indexOnly($index_name);
     }
 
+    public function getObjectId(Model $model)
+    {
+        return $model->{$this->getObjectIdKey($model)};
+    }
+
     public function getObjectIdKey(Model $model)
     {
-        return property_exists($model, 'object_id_key') ? $model->{$model->object_id_key} : 'id';
+        return property_exists($model, 'object_id_key') ? $model->object_id_key : $model->getKeyName();
     }
 
     /**
