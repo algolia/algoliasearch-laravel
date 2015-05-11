@@ -4,9 +4,6 @@ Trait AlgoliaEloquentTrait
 {
     private static $method_get_name = 'getAlgoliaRecord';
 
-    public $auto_index = true;
-    public $auto_delete = true;
-
     /**
      * Static calls
      */

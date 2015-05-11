@@ -19,7 +19,7 @@ class ModelHelper
 
     private function hasAlgoliaTrait(Model $model)
     {
-        return (! isset(class_uses($model)['Algolia\AlgoliasearchLaravel\AlgoliaEloquentTrait']));
+        return (isset(class_uses($model)['Algolia\AlgoliasearchLaravel\AlgoliaEloquentTrait']));
     }
 
     public function isAutoIndex(Model $model)
@@ -45,11 +45,6 @@ class ModelHelper
     public function getObjectIdKey(Model $model)
     {
         return property_exists($model, 'object_id_key') ? $model->{$model->object_id_key} : 'id';
-    }
-
-    public function getIndex($index_name)
-    {
-        return $this->algolia->initIndex($index_name);
     }
 
     /**
