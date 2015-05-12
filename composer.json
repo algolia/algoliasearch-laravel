@@ -6,9 +6,15 @@
   "require": {
     "vinkla/algolia": "1.0.0"
   },
+  "require-dev": {
+    "phpunit/phpunit": "dev-master",
+    "mockery/mockery": "dev-master",
+    "orchestra/testbench": "3.0.6"
+  },
   "autoload": {
     "psr-4": {
-      "Algolia\\AlgoliasearchLaravel\\": "src/"
+      "Algolia\\AlgoliasearchLaravel\\": "src/",
+      "Algolia\\Tests\\": "tests/"
     }
   }
 }
