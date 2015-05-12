@@ -4,7 +4,7 @@
   "license": "MIT",
   "keywords": ["laravel", "algolia", "search", "api"],
   "require": {
-    "vinkla/algolia": "1.0.0"
+    "algolia/algoliasearch-laravel-manager": "1.1.2"
   },
   "require-dev": {
     "phpunit/phpunit": "dev-master",

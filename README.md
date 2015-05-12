@@ -3,7 +3,7 @@ Algolia Search for Laravel
 
 This php package integrate the Algolia Search API to your favorite Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package. Php 5.4+ is supported.
 
-[![Build Status](https://travis-ci.org/algolia/algoliasearch-laravel.png?branch=master)](https://travis-ci.org/algolia/algoliasearch-rails)
+[![Build Status](https://travis-ci.org/algolia/algoliasearch-laravel.png?branch=master)](https://travis-ci.org/algolia/algoliasearch-laravel)
 ![ActiveRecord](https://img.shields.io/badge/ActiveRecord-yes-blue.svg?style=flat-square)
 
 Table of Content
