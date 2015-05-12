@@ -108,7 +108,7 @@ Trait AlgoliaEloquentTrait
         /** @var \AlgoliaSearch\Index $index */
         foreach ($indices as $index)
             if ($model_helper->indexOnly($this, $index->indexName))
-                $index->addObject($this->_getAlgoliaRecord());
+                $index->addObject($this->getAlgoliaRecordDefault());
     }
 
     public function removeFromIndex()
@@ -120,6 +120,6 @@ Trait AlgoliaEloquentTrait
 
         /** @var \AlgoliaSearch\Index $index */
         foreach ($indices as $index)
-            $index->deleteObject($this->id);
+            $index->deleteObject($model_helper->getObjectId($this));
     }
 }
