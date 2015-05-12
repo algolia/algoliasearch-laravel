@@ -8,16 +8,17 @@ Trait AlgoliaEloquentTrait
      * Static calls
      */
 
-    public function _reindex()
+    public function _reindex($safe = true)
     {
         /** @var \Algolia\AlgoliasearchLaravel\ModelHelper $model_helper */
         $model_helper = \App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
 
         $indices = $model_helper->getIndices($this);
+        $indices_tmp = $safe ? $model_helper->getIndicesTmp($this) : $indices;
 
-        static::chunk(100, function ($models) use ($indices, $model_helper) {
+        static::chunk(100, function ($models) use ($indices_tmp, $model_helper) {
             /** @var \AlgoliaSearch\Index $index */
-            foreach ($indices as $index)
+            foreach ($indices_tmp as $index)
             {
                 $records = [];
 
@@ -29,6 +30,10 @@ Trait AlgoliaEloquentTrait
             }
 
         });
+
+        if ($safe)
+            for ($i = 0; $i < count($indices); $i++)
+                $model_helper->algolia->moveIndex($indices_tmp[$i]->indexName, $indices[0]->indexName);
     }
 
     public function _clearIndices()
@@ -61,6 +66,48 @@ Trait AlgoliaEloquentTrait
         $result = $index->search($query, ['hitsPerPage' => 0]);
 
         return $result;
+    }
+
+    public function _setSettings()
+    {
+        /** @var \Algolia\AlgoliasearchLaravel\ModelHelper $model_helper */
+        $model_helper = \App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
+
+        $settings = $model_helper->getSettings($this);
+        $slaves_settings = $model_helper->getSlavesSettings($this);
+
+        $indices = $model_helper->getIndices($this);
+
+        $slaves = isset($settings['slaves']) ? $settings['slaves'] : [];
+
+        $b = true;
+
+        /** @var \AlgoliaSearch\Index $index */
+        foreach ($indices as $index)
+        {
+            $index->setSettings($settings);
+
+            if ($b)
+            {
+                $b = false;
+                unset($settings['slaves']);
+            }
+        }
+
+        if (count($slaves) > 0)
+        {
+            foreach ($slaves as $slave)
+            {
+                if (isset($slaves_settings[$slave]))
+                {
+                    $index = $model_helper->algolia->initIndex($slave);
+
+                    $s = array_merge($settings, $slaves_settings[$slave]);
+
+                    $index->setSettings($s);
+                }
+            }
+        }
     }
 
 
