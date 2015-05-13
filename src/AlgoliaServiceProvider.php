@@ -22,27 +22,14 @@ class AlgoliaServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->registerVinklaExtension();
+        $this->registerManager();
 
         \Event::subscribe('\Algolia\AlgoliasearchLaravel\EloquentSuscriber');
     }
 
-    private function registerVinklaExtension()
+    private function registerManager()
     {
-        $this->app->singleton('algolia.factory', function () {
-            return new AlgoliaFactory();
-        });
-
-        $this->app->alias('algolia.factory', 'Vinkla\Algolia\Factories\AlgoliaFactory');
-
-        $this->app->singleton('algolia', function ($app) {
-            $config = $app['config'];
-            $factory = $app['algolia.factory'];
-
-            return new AlgoliaManager($config, $factory);
-        });
-
-        $this->app->alias('algolia', 'Vinkla\Algolia\AlgoliaManager');
+        $this->app->register('Vinkla\Algolia\AlgoliaServiceProvider');
     }
 
     public function provides()
