@@ -1,4 +1,6 @@
-<?php namespace AlgoliaSearch\Laravel;
+<?php
+
+namespace AlgoliaSearch\Laravel;
 
 class EloquentSubscriber
 {
@@ -11,25 +13,30 @@ class EloquentSubscriber
 
     public function saved($model)
     {
-        if (! $this->modelHelper->isAutoIndex($model))
+        if (!$this->modelHelper->isAutoIndex($model)) {
             return true;
+        }
 
         /** @var \AlgoliaSearch\Index $index */
-        foreach ($this->modelHelper->getIndices($model) as $index);
-            if ($this->modelHelper->indexOnly($model, $index->indexName))
+        foreach ($this->modelHelper->getIndices($model) as $index) {
+            if ($this->modelHelper->indexOnly($model, $index->indexName)) {
                 $index->addObject($this->modelHelper->getAlgoliaRecord($model), $this->modelHelper->getKey($model));
+            }
+        }
 
         return true;
     }
 
     public function deleted($model)
     {
-        if (! $this->modelHelper->isAutoDelete($model))
+        if (!$this->modelHelper->isAutoDelete($model)) {
             return true;
+        }
 
         /** @var \AlgoliaSearch\Index $index */
-        foreach ($this->modelHelper->getIndices($model) as $index);
+        foreach ($this->modelHelper->getIndices($model) as $index) {
             $index->deleteObject($model->id);
+        }
 
         return true;
     }

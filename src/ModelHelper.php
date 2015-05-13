@@ -1,4 +1,6 @@
-<?php namespace AlgoliaSearch\Laravel;
+<?php
+
+namespace AlgoliaSearch\Laravel;
 
 use Illuminate\Database\Eloquent\Model;
 use Vinkla\Algolia\AlgoliaManager;
@@ -29,7 +31,7 @@ class ModelHelper
 
     public function isAutoDelete(Model $model)
     {
-        return ($this->hasAlgoliaTrait($model) && (property_exists($model, 'auto_delete') == false ||$model::$auto_delete === true));
+        return ($this->hasAlgoliaTrait($model) && (property_exists($model, 'auto_delete') == false || $model::$auto_delete === true));
     }
 
     public function getKey(Model $model)
@@ -39,7 +41,7 @@ class ModelHelper
 
     public function indexOnly(Model $model, $index_name)
     {
-        return ! method_exists($model, 'indexOnly') || $model->indexOnly($index_name);
+        return !method_exists($model, 'indexOnly') || $model->indexOnly($index_name);
     }
 
     public function getObjectId(Model $model)
@@ -69,14 +71,15 @@ class ModelHelper
     {
         $indicesName = [];
 
-        if (property_exists($model, 'indices') && is_array($model->indices))
+        if (property_exists($model, 'indices') && is_array($model->indices)) {
             $indicesName = $model->indices;
-        else
+        } else {
             $indicesName[] = $this->getIndexName($model);
+        }
 
-        $env_suffix = property_exists($model, 'per_environment') && $model->per_environment === true ? '_' . \App::environment() : '';
+        $env_suffix = property_exists($model, 'per_environment') && $model->per_environment === true ? '_'.\App::environment() : '';
 
-        $indices = array_map(function ($index_name) use($env_suffix) {
+        $indices = array_map(function ($index_name) use ($env_suffix) {
             return $this->algolia->initIndex($index_name.$env_suffix);
         }, $indicesName);
 
@@ -87,15 +90,16 @@ class ModelHelper
     {
         $indicesName = [];
 
-        if (property_exists($model, 'indices') && is_array($model->indices))
+        if (property_exists($model, 'indices') && is_array($model->indices)) {
             $indicesName = $model->indices;
-        else
+        } else {
             $indicesName[] = $this->getIndexName($model);
+        }
 
-        $env_suffix = property_exists($model, 'per_environment') && $model->per_environment === true ? '_' . \App::environment() : '';
+        $env_suffix = property_exists($model, 'per_environment') && $model->per_environment === true ? '_'.\App::environment() : '';
 
-        $indices = array_map(function ($index_name) use($env_suffix) {
-            return $this->algolia->initIndex($index_name.$env_suffix."_tmp");
+        $indices = array_map(function ($index_name) use ($env_suffix) {
+            return $this->algolia->initIndex($index_name.$env_suffix.'_tmp');
         }, $indicesName);
 
         return $indices;
