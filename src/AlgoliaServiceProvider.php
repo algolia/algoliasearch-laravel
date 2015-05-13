@@ -9,7 +9,7 @@ class AlgoliaServiceProvider extends ServiceProvider
     {
         $this->registerManager();
 
-        Event::subscribe('\AlgoliaSearch\Laravel\EloquentSuscriber');
+        Event::subscribe('\AlgoliaSearch\Laravel\EloquentSubscriber');
     }
 
     private function registerManager()

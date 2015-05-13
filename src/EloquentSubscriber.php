@@ -36,7 +36,7 @@ class EloquentSubscriber
 
     public function subscribe($events)
     {
-        $events->listen('eloquent.saved*', '\AlgoliaSearch\Laravel\EloquentSuscriber@saved');
-        $events->listen('eloquent.deleted*', '\AlgoliaSearch\Laravel\EloquentSuscriber@deleted');
+        $events->listen('eloquent.saved*', '\AlgoliaSearch\Laravel\EloquentSubscriber@saved');
+        $events->listen('eloquent.deleted*', '\AlgoliaSearch\Laravel\EloquentSubscriber@deleted');
     }
 }
