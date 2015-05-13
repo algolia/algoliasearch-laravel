@@ -1,9 +1,7 @@
-<?php namespace Algolia\Tests\Models;
-
-use Algolia\AlgoliasearchLaravel\AlgoliaEloquentTrait;
+<?php namespace AlgoliaSearch\Tests\Models;
 
 class Model3 extends \Illuminate\Database\Eloquent\Model
 {
-    public $auto_index = true;
-    public $auto_delete = true;
+    public static $auto_index = true;
+    public static $auto_delete = true;
 }

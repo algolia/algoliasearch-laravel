@@ -1,18 +1,18 @@
-<?php namespace Algolia\Tests;
+<?php namespace AlgoliaSearch\Tests;
 
-use Algolia\AlgoliasearchLaravel\AlgoliaEloquentTrait;
-use Algolia\Tests\Models\Model1;
-use Algolia\Tests\Models\Model2;
-use Algolia\Tests\Models\Model3;
-use Algolia\Tests\Models\Model4;
-use Algolia\Tests\Models\Model5;
+use AlgoliaSearch\Laravel\AlgoliaEloquentTrait;
+use AlgoliaSearch\Tests\Models\Model1;
+use AlgoliaSearch\Tests\Models\Model2;
+use AlgoliaSearch\Tests\Models\Model3;
+use AlgoliaSearch\Tests\Models\Model4;
+use AlgoliaSearch\Tests\Models\Model5;
 use Orchestra\Testbench\TestCase;
 
 
 
 class AlgoliaManagerTest extends TestCase
 {
-    /** @var \Algolia\AlgoliasearchLaravel\ModelHelper model_helper */
+    /** @var \AlgoliaSearch\Laravel\ModelHelper model_helper */
     private $model_helper;
 
     public function setUp()
@@ -21,7 +21,7 @@ class AlgoliaManagerTest extends TestCase
 
         $this->app->config->set('algolia', ['default' => 'main','connections' => ['main' => ['id' => 'your-application-id','key' => 'your-api-key',],'alternative' => ['id' => 'your-application-id','key' => 'your-api-key',],]]);
 
-        $this->model_helper = $this->app->make('Algolia\AlgoliasearchLaravel\ModelHelper');
+        $this->model_helper = $this->app->make('AlgoliaSearch\Laravel\ModelHelper');
     }
     public function testAutoIndexAndAutoDelete()
     {

@@ -1,6 +1,5 @@
-<?php namespace Algolia\AlgoliasearchLaravel;
+<?php namespace AlgoliaSearch\Laravel;
 
-use Algolia\Tests\Models\Model4;
 use Illuminate\Database\Eloquent\Model;
 use Vinkla\Algolia\AlgoliaManager;
 
@@ -20,7 +19,7 @@ class ModelHelper
 
     private function hasAlgoliaTrait(Model $model)
     {
-        return (isset(class_uses($model)['Algolia\AlgoliasearchLaravel\AlgoliaEloquentTrait']));
+        return (isset(class_uses($model)['AlgoliaSearch\Laravel\AlgoliaEloquentTrait']));
     }
 
     public function isAutoIndex(Model $model)

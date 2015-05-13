@@ -1,7 +1,7 @@
-<?php namespace Algolia\Tests;
+<?php namespace AlgoliaSearch\Tests;
 
-use Algolia\Tests\Models\Model2;
-use Algolia\Tests\Models\Model4;
+use AlgoliaSearch\Tests\Models\Model2;
+use AlgoliaSearch\Tests\Models\Model4;
 use \Orchestra\Testbench\TestCase;
 
 class AlgoliaEloquentTraitTest extends TestCase
@@ -21,10 +21,10 @@ class AlgoliaEloquentTraitTest extends TestCase
 
     public function testPushToindex()
     {
-        /** @var \Algolia\AlgoliasearchLaravel\ModelHelper $real_model_helper */
-        $real_model_helper = \App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $real_model_helper */
+        $real_model_helper = \App::make('\AlgoliaSearch\Laravel\ModelHelper');
 
-        $model_helper = \Mockery::mock('\Algolia\AlgoliasearchLaravel\ModelHelper');
+        $model_helper = \Mockery::mock('\AlgoliaSearch\Laravel\ModelHelper');
 
         $index = \Mockery::mock('\AlgoliaSearch\Index');
 
@@ -32,7 +32,7 @@ class AlgoliaEloquentTraitTest extends TestCase
         $model_helper->shouldReceive('getObjectId')->andReturn($real_model_helper->getObjectId(new Model4()));
         $model_helper->shouldReceive('indexOnly')->andReturn(true);
 
-        \App::instance('\Algolia\AlgoliasearchLaravel\ModelHelper', $model_helper);
+        \App::instance('\AlgoliaSearch\Laravel\ModelHelper', $model_helper);
 
         $index->shouldReceive('addObject')->times(2)->with((new Model4())->getAlgoliaRecordDefault());
 
@@ -41,17 +41,17 @@ class AlgoliaEloquentTraitTest extends TestCase
 
     public function testRemoveFromIndex()
     {
-        /** @var \Algolia\AlgoliasearchLaravel\ModelHelper $real_model_helper */
-        $real_model_helper = \App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $real_model_helper */
+        $real_model_helper = \App::make('\AlgoliaSearch\Laravel\ModelHelper');
 
-        $model_helper = \Mockery::mock('\Algolia\AlgoliasearchLaravel\ModelHelper');
+        $model_helper = \Mockery::mock('\AlgoliaSearch\Laravel\ModelHelper');
 
         $index = \Mockery::mock('\AlgoliaSearch\Index');
 
         $model_helper->shouldReceive('getIndices')->andReturn([$index, $index]);
         $model_helper->shouldReceive('getObjectId')->andReturn($real_model_helper->getObjectId(new Model4()));
 
-        \App::instance('\Algolia\AlgoliasearchLaravel\ModelHelper', $model_helper);
+        \App::instance('\AlgoliaSearch\Laravel\ModelHelper', $model_helper);
 
         $index->shouldReceive('deleteObject')->times(2)->with(1);
 

@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Algolia\\AlgoliasearchLaravel\\": "src/"
+            "AlgoliaSearch\\Laravel\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Algolia\\Tests\\": "tests/"
+            "AlgoliaSearch\\Tests\\": "tests/"
         }
     },
     "extra": {

@@ -1,4 +1,4 @@
-<?php namespace Algolia\AlgoliasearchLaravel;
+<?php namespace AlgoliaSearch\Laravel;
 
 class EloquentSuscriber
 {
@@ -36,7 +36,7 @@ class EloquentSuscriber
 
     public function subscribe($events)
     {
-        $events->listen('eloquent.saved*', '\Algolia\AlgoliasearchLaravel\EloquentSuscriber@saved');
-        $events->listen('eloquent.deleted*', '\Algolia\AlgoliasearchLaravel\EloquentSuscriber@deleted');
+        $events->listen('eloquent.saved*', '\AlgoliaSearch\Laravel\EloquentSuscriber@saved');
+        $events->listen('eloquent.deleted*', '\AlgoliaSearch\Laravel\EloquentSuscriber@deleted');
     }
 }

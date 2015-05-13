@@ -1,6 +1,6 @@
-<?php namespace Algolia\Tests\Models;
+<?php namespace AlgoliaSearch\Tests\Models;
 
-use Algolia\AlgoliasearchLaravel\AlgoliaEloquentTrait;
+use AlgoliaSearch\Laravel\AlgoliaEloquentTrait;
 
 class Model1 extends \Illuminate\Database\Eloquent\Model
 {
