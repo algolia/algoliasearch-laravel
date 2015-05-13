@@ -1,6 +1,5 @@
 <?php namespace Algolia\AlgoliasearchLaravel;
 
-use Algolia\Tests\Models\Model4;
 use Illuminate\Database\Eloquent\Model;
 use Vinkla\Algolia\AlgoliaManager;
 

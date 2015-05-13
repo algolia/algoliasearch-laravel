@@ -1,5 +1,7 @@
 <?php namespace Algolia\AlgoliasearchLaravel;
 
+use Illuminate\Support\Facades\App;
+
 Trait AlgoliaEloquentTrait
 {
     private static $method_get_name = 'getAlgoliaRecord';
@@ -39,7 +41,7 @@ Trait AlgoliaEloquentTrait
     public function _clearIndices()
     {
         /** @var \Algolia\AlgoliasearchLaravel\ModelHelper $model_helper */
-        $model_helper = \App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
+        $model_helper = App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
 
         $indices = $model_helper->getIndices($this);
 
@@ -51,7 +53,7 @@ Trait AlgoliaEloquentTrait
     public function _search($query, $parameters = [])
     {
         /** @var \Algolia\AlgoliasearchLaravel\ModelHelper $model_helper */
-        $model_helper = \App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
+        $model_helper = App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
 
         $index = null;
 
@@ -71,7 +73,7 @@ Trait AlgoliaEloquentTrait
     public function _setSettings()
     {
         /** @var \Algolia\AlgoliasearchLaravel\ModelHelper $model_helper */
-        $model_helper = \App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
+        $model_helper = App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
 
         $settings = $model_helper->getSettings($this);
         $slaves_settings = $model_helper->getSlavesSettings($this);
@@ -130,7 +132,7 @@ Trait AlgoliaEloquentTrait
     public function getAlgoliaRecordDefault()
     {
         /** @var \Algolia\AlgoliasearchLaravel\ModelHelper $model_helper */
-        $model_helper = \App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
+        $model_helper = App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
 
         $record = null;
 
@@ -148,7 +150,7 @@ Trait AlgoliaEloquentTrait
     public function pushToindex()
     {
         /** @var \Algolia\AlgoliasearchLaravel\ModelHelper $model_helper */
-        $model_helper = \App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
+        $model_helper = App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
 
         $indices = $model_helper->getIndices($this);
 
@@ -161,7 +163,7 @@ Trait AlgoliaEloquentTrait
     public function removeFromIndex()
     {
         /** @var \Algolia\AlgoliasearchLaravel\ModelHelper $model_helper */
-        $model_helper = \App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
+        $model_helper = App::make('\Algolia\AlgoliasearchLaravel\ModelHelper');
 
         $indices = $model_helper->getIndices($this);
 
