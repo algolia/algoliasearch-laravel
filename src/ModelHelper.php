@@ -67,36 +67,36 @@ class ModelHelper
      */
     public function getIndices(Model $model)
     {
-        $indices_name = [];
+        $indicesName = [];
 
         if (property_exists($model, 'indices') && is_array($model->indices))
-            $indices_name = $model->indices;
+            $indicesName = $model->indices;
         else
-            $indices_name[] = $this->getIndexName($model);
+            $indicesName[] = $this->getIndexName($model);
 
         $env_suffix = property_exists($model, 'per_environment') && $model->per_environment === true ? '_' . \App::environment() : '';
 
         $indices = array_map(function ($index_name) use($env_suffix) {
             return $this->algolia->initIndex($index_name.$env_suffix);
-        }, $indices_name);
+        }, $indicesName);
 
         return $indices;
     }
 
     public function getIndicesTmp(Model $model)
     {
-        $indices_name = [];
+        $indicesName = [];
 
         if (property_exists($model, 'indices') && is_array($model->indices))
-            $indices_name = $model->indices;
+            $indicesName = $model->indices;
         else
-            $indices_name[] = $this->getIndexName($model);
+            $indicesName[] = $this->getIndexName($model);
 
         $env_suffix = property_exists($model, 'per_environment') && $model->per_environment === true ? '_' . \App::environment() : '';
 
         $indices = array_map(function ($index_name) use($env_suffix) {
             return $this->algolia->initIndex($index_name.$env_suffix."_tmp");
-        }, $indices_name);
+        }, $indicesName);
 
         return $indices;
     }
