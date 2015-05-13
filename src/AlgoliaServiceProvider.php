@@ -6,20 +6,6 @@ use Vinkla\Algolia\Factories\AlgoliaFactory;
 
 class AlgoliaServiceProvider extends ServiceProvider
 {
-    public function boot()
-    {
-        $this->setupConfig();
-    }
-
-    protected function setupConfig()
-    {
-        $source = realpath(__DIR__.'/../config/algolia.php');
-
-        $this->publishes([$source => config_path('algolia.php')]);
-
-        $this->mergeConfigFrom($source, 'algolia');
-    }
-
     public function register()
     {
         $this->registerManager();
