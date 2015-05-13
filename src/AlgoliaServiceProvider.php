@@ -1,8 +1,7 @@
 <?php namespace Algolia\AlgoliasearchLaravel;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Vinkla\Algolia\AlgoliaManager;
-use Vinkla\Algolia\Factories\AlgoliaFactory;
 
 class AlgoliaServiceProvider extends ServiceProvider
 {
@@ -10,7 +9,7 @@ class AlgoliaServiceProvider extends ServiceProvider
     {
         $this->registerManager();
 
-        \Event::subscribe('\Algolia\AlgoliasearchLaravel\EloquentSuscriber');
+        Event::subscribe('\Algolia\AlgoliasearchLaravel\EloquentSuscriber');
     }
 
     private function registerManager()
