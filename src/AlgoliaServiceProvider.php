@@ -1,7 +1,9 @@
-<?php namespace AlgoliaSearch\Laravel;
+<?php
 
-use Illuminate\Support\ServiceProvider;
+namespace AlgoliaSearch\Laravel;
+
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\ServiceProvider;
 
 class AlgoliaServiceProvider extends ServiceProvider
 {
@@ -21,7 +23,7 @@ class AlgoliaServiceProvider extends ServiceProvider
     {
         return [
             'algolia',
-            'algolia.factory'
+            'algolia.factory',
         ];
     }
 }

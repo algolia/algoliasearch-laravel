@@ -1,8 +1,12 @@
-<?php namespace AlgoliaSearch\Tests;
+<?php
+
+namespace AlgoliaSearch\Tests;
 
 use AlgoliaSearch\Tests\Models\Model2;
 use AlgoliaSearch\Tests\Models\Model4;
-use \Orchestra\Testbench\TestCase;
+use Illuminate\Support\Facades\App;
+use Mockery;
+use Orchestra\Testbench\TestCase;
 
 class AlgoliaEloquentTraitTest extends TestCase
 {
@@ -10,7 +14,7 @@ class AlgoliaEloquentTraitTest extends TestCase
     {
         parent::setUp();
 
-        $this->app->config->set('algolia', ['default' => 'main','connections' => ['main' => ['id' => 'your-application-id','key' => 'your-api-key',],'alternative' => ['id' => 'your-application-id','key' => 'your-api-key',],]]);
+        $this->app->config->set('algolia', ['default' => 'main','connections' => ['main' => ['id' => 'your-application-id','key' => 'your-api-key'],'alternative' => ['id' => 'your-application-id','key' => 'your-api-key']]]);
     }
 
     public function testGetAlgoliaRecordDefault()
@@ -21,18 +25,18 @@ class AlgoliaEloquentTraitTest extends TestCase
 
     public function testPushToindex()
     {
-        /** @var \AlgoliaSearch\Laravel\ModelHelper $real_model_helper */
-        $real_model_helper = \App::make('\AlgoliaSearch\Laravel\ModelHelper');
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $realModelHelper */
+        $realModelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
 
-        $model_helper = \Mockery::mock('\AlgoliaSearch\Laravel\ModelHelper');
+        $modelHelper = Mockery::mock('\AlgoliaSearch\Laravel\ModelHelper');
 
-        $index = \Mockery::mock('\AlgoliaSearch\Index');
+        $index = Mockery::mock('\AlgoliaSearch\Index');
 
-        $model_helper->shouldReceive('getIndices')->andReturn([$index, $index]);
-        $model_helper->shouldReceive('getObjectId')->andReturn($real_model_helper->getObjectId(new Model4()));
-        $model_helper->shouldReceive('indexOnly')->andReturn(true);
+        $modelHelper->shouldReceive('getIndices')->andReturn([$index, $index]);
+        $modelHelper->shouldReceive('getObjectId')->andReturn($realModelHelper->getObjectId(new Model4()));
+        $modelHelper->shouldReceive('indexOnly')->andReturn(true);
 
-        \App::instance('\AlgoliaSearch\Laravel\ModelHelper', $model_helper);
+        App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);
 
         $index->shouldReceive('addObject')->times(2)->with((new Model4())->getAlgoliaRecordDefault());
 
@@ -41,17 +45,17 @@ class AlgoliaEloquentTraitTest extends TestCase
 
     public function testRemoveFromIndex()
     {
-        /** @var \AlgoliaSearch\Laravel\ModelHelper $real_model_helper */
-        $real_model_helper = \App::make('\AlgoliaSearch\Laravel\ModelHelper');
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $realModelHelper */
+        $realModelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
 
-        $model_helper = \Mockery::mock('\AlgoliaSearch\Laravel\ModelHelper');
+        $modelHelper = Mockery::mock('\AlgoliaSearch\Laravel\ModelHelper');
 
-        $index = \Mockery::mock('\AlgoliaSearch\Index');
+        $index = Mockery::mock('\AlgoliaSearch\Index');
 
-        $model_helper->shouldReceive('getIndices')->andReturn([$index, $index]);
-        $model_helper->shouldReceive('getObjectId')->andReturn($real_model_helper->getObjectId(new Model4()));
+        $modelHelper->shouldReceive('getIndices')->andReturn([$index, $index]);
+        $modelHelper->shouldReceive('getObjectId')->andReturn($realModelHelper->getObjectId(new Model4()));
 
-        \App::instance('\AlgoliaSearch\Laravel\ModelHelper', $model_helper);
+        App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);
 
         $index->shouldReceive('deleteObject')->times(2)->with(1);
 
@@ -60,6 +64,6 @@ class AlgoliaEloquentTraitTest extends TestCase
 
     public function tearDown()
     {
-        \Mockery::close();
+        Mockery::close();
     }
 }

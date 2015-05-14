@@ -1,8 +1,11 @@
-<?php namespace AlgoliaSearch\Tests\Models;
+<?php
+
+namespace AlgoliaSearch\Tests\Models;
 
 use AlgoliaSearch\Laravel\AlgoliaEloquentTrait;
+use Illuminate\Database\Eloquent\Model;
 
-class Model4 extends \Illuminate\Database\Eloquent\Model
+class Model4 extends Model
 {
     use AlgoliaEloquentTrait;
 
@@ -20,10 +23,10 @@ class Model4 extends \Illuminate\Database\Eloquent\Model
 
     public function getAlgoliaRecord()
     {
-        $extra_data = [
-            'name' => 'test'
+        $extraData = [
+            'name' => 'test',
         ];
 
-        return array_merge($this->toArray(), $extra_data);
+        return array_merge($this->toArray(), $extraData);
     }
 }
