@@ -4,7 +4,6 @@ Algolia Search for Laravel
 This php package integrate the Algolia Search API to your favorite Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package. Php 5.4+ is supported.
 
 [![Build Status](https://img.shields.io/travis/algolia/algoliasearch-laravel/master.svg?style=flat)](https://travis-ci.org/algolia/algoliasearch-laravel)
-[![ActiveRecord](https://img.shields.io/badge/ActiveRecord-yes-blue.svg?style=flat)](https://github.com/algolia/algoliasearch-laravel)
 [![Latest Version](https://img.shields.io/github/release/algolia/algoliasearch-laravel.svg?style=flat)](https://github.com/algolia/algoliasearch-laravel/releases)
 [![License](https://img.shields.io/packagist/l/algolia/algoliasearch-laravel.svg?style=flat)](https://packagist.org/packages/algolia/algoliasearch-laravel)
 
@@ -36,7 +35,7 @@ Add `algolia/algoliasearch-laravel` to your `composer.json` file:
 Add the service provider to ```config/app.php``` in the `providers` array.
 
 ```php
-'Algolia\AlgoliasearchLaravel\AlgoliaServiceProvider'
+'AlgoliaSearch\Laravel\AlgoliaServiceProvider'
 ```
 
 Configuration
@@ -95,10 +94,17 @@ class Contact extends \Illuminate\Database\Eloquent\Model
     
     public $algolia_settings = [
     	'attributesToIndex => ['id', 'name'],
-    	'customRanking => ['desc(popularity)', 'asc('name')]
+    	'customRanking => ['desc(popularity)'], 'asc(name)]'
     ]
 }
 ```
+
+You can then do a save the settings to algolia using the setSetting method
+
+```php
+Contact::setSettings();
+```
+
 #### Frontend Search (realtime experience)
 
 Traditional search implementations tend to have search logic and functionality on the backend. This made sense when the search experience consisted of a user entering a search query, executing that search, and then being redirected to a search result page.
@@ -120,7 +126,7 @@ index.search('something', function(success, hits) {
 You could also use `search` but it's not recommended. This method will search on Algolia
 
 ```php
-Contact::search("jon doe")
+Contact::search("jon doe");
 ```
 
 Options
@@ -135,14 +141,14 @@ You can disable auto-indexing and auto-removing setting the following options:
 ```php
 class Contact extends \Illuminate\Database\Eloquent\Model
 {
-    use AlgoliaEloquentTrait;
+	use AlgoliaEloquentTrait;
     
-    public $auto_index = false;
-	 public $auto_delete = false;
+	public $auto_index = false;
+	public $auto_delete = false;
 }
 ```
  
-You can temporary disable auto-indexing using the <code>without_auto_index</code> scope. This is often used for performance reason.
+You can temporary disable auto-indexing. This is often used for performance reason.
 
 ```php
 Contact::$auto_index = false;
@@ -151,7 +157,7 @@ Contact.clearIndices();
 for ($i = 0; $i < 10000; $i++)
 	$contact = Contact::firstOrCreate(['name' => 'Jean']);
 
-Contact::reindex()! # will use batch operations
+Contact::reindex() # will use batch operations
 ```
 
 #### Custom index name
@@ -189,7 +195,7 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 {
     use AlgoliaEloquentTrait;
     
-	public $object_id_key = 'new key';
+	public $object_id_key = 'new_key';
 }
 ```
 
@@ -204,10 +210,11 @@ class Contact extends \Illuminate\Database\Eloquent\Model
     
 	public function indexOnly($index_name)
 	{
-		if ($index_name == "contact_all")
-   			return $this->isActive == 1
-   			
-   	   	return 1;
+		if ($condition) {
+	   	   	return 1;
+		}
+	   	
+	   	return 0;
 	}
 }
 ```
@@ -220,7 +227,7 @@ Indexing
 You can trigger indexing using the <code>pushToindex</code> instance method.
 
 ```php
-$c = Contact::firstOrCreate!(['name' => 'Jean']);
+$c = Contact::firstOrCreate(['name' => 'Jean']);
 $c->pushToindex();
 ```
 
@@ -229,7 +236,7 @@ $c->pushToindex();
 And trigger index removing using the <code>removeFromIndex</code> instance method.
 
 ```php
-$c = Contact::firstOrCreate!(['name' => 'Jean']);
+$c = Contact::firstOrCreate(['name' => 'Jean']);
 $c->removeFromindex();
 ```
 #### Reindexing
@@ -265,9 +272,9 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 	 use AlgoliaEloquentTrait;
     
 	 public $algolia_settings = [
-        'attributesToIndex' => ['id', 'name'],
-    	'customRanking' => ['desc(popularity)', 'asc(name)'],
-    	'slaves' => ['contacts_desc']
+		'attributesToIndex'    => ['id', 'name'],
+    	'customRanking'        => ['desc(popularity)', 'asc(name)'],
+    	'slaves'               => ['contacts_desc']
     ];
 
     public $slaves_settings = [
