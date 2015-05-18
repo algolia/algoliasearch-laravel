@@ -74,11 +74,11 @@ class Contact extends \Illuminate\Database\Eloquent\Model
     
     public function getAlgoliaRecord()
     {
-        $extra_data = [
+        $extraData = [
             'custom_name' => 'Custom Name'
         ];
 
-        return array_merge($this->toArray(), $extra_data);
+        return array_merge($this->toArray(), $extraData);
     }
 }
 ```
@@ -92,7 +92,7 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 {
     use AlgoliaEloquentTrait;
     
-    public $algolia_settings = [
+    public $algoliaSettings = [
     	'attributesToIndex => ['id', 'name'],
     	'customRanking => ['desc(popularity)'], 'asc(name)]'
     ]
@@ -143,15 +143,15 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 {
 	use AlgoliaEloquentTrait;
     
-	public $auto_index = false;
-	public $auto_delete = false;
+	public $autoIndex = false;
+	public $autoDelete = false;
 }
 ```
  
 You can temporary disable auto-indexing. This is often used for performance reason.
 
 ```php
-Contact::$auto_index = false;
+Contact::$autoIndex = false;
 Contact.clearIndices();
 
 for ($i = 0; $i < 10000; $i++)
@@ -182,7 +182,7 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 {
     use AlgoliaEloquentTrait;
     
-    public $per_environment = true; # index name will be "Contacts_{\App::environnement()}"
+    public $perEnvironment = true; # index name will be "Contacts_{\App::environnement()}"
 }
 ```
 
@@ -195,7 +195,7 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 {
     use AlgoliaEloquentTrait;
     
-	public $object_id_key = 'new_key';
+	public $objectIdKey = 'new_key';
 }
 ```
 
@@ -271,7 +271,7 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 {
 	 use AlgoliaEloquentTrait;
     
-	 public $algolia_settings = [
+	 public $algoliaSettings = [
 		'attributesToIndex'    => ['id', 'name'],
     	'customRanking'        => ['desc(popularity)', 'asc(name)'],
     	'slaves'               => ['contacts_desc']
@@ -312,9 +312,9 @@ class Contact extends \Illuminate\Database\Eloquent\Model
     
 	public $indices = ["contact_public", "contact_private"];
     
-	public function indexOnly($index_name)
+	public function indexOnly($indexName)
 	{
-		if ($index_name == "contact_public")
+		if ($indexName == "contact_public")
    			return $this->isPublic == 1;
    			
    	   	return $this->isPublic == 0;

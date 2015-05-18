@@ -26,12 +26,12 @@ class ModelHelper
 
     public function isAutoIndex(Model $model)
     {
-        return ($this->hasAlgoliaTrait($model) && (property_exists($model, 'auto_index') == false || $model::$auto_index === true));
+        return ($this->hasAlgoliaTrait($model) && (property_exists($model, 'autoIndex') == false || $model::$autoIndex === true));
     }
 
     public function isAutoDelete(Model $model)
     {
-        return ($this->hasAlgoliaTrait($model) && (property_exists($model, 'auto_delete') == false || $model::$auto_delete === true));
+        return ($this->hasAlgoliaTrait($model) && (property_exists($model, 'autoDelete') == false || $model::$autoDelete === true));
     }
 
     public function getKey(Model $model)
@@ -51,17 +51,17 @@ class ModelHelper
 
     public function getObjectIdKey(Model $model)
     {
-        return property_exists($model, 'object_id_key') ? $model->object_id_key : $model->getKeyName();
+        return property_exists($model, 'objectIdKey') ? $model->objectIdKey : $model->getKeyName();
     }
 
     public function getSettings(Model $model)
     {
-        return property_exists($model, 'algolia_settings') ? $model->algolia_settings : [];
+        return property_exists($model, 'algoliaSettings') ? $model->algoliaSettings : [];
     }
 
     public function getSlavesSettings(Model $model)
     {
-        return property_exists($model, 'slaves_settings') ? $model->slaves_settings : [];
+        return property_exists($model, 'slavesSettings') ? $model->slavesSettings : [];
     }
 
     /**
@@ -77,7 +77,7 @@ class ModelHelper
             $indicesName[] = $this->getIndexName($model);
         }
 
-        $env_suffix = property_exists($model, 'per_environment') && $model->per_environment === true ? '_'.\App::environment() : '';
+        $env_suffix = property_exists($model, 'perEnvironment') && $model->perEnvironment === true ? '_'.\App::environment() : '';
 
         $indices = array_map(function ($index_name) use ($env_suffix) {
             return $this->algolia->initIndex($index_name.$env_suffix);
@@ -96,7 +96,7 @@ class ModelHelper
             $indicesName[] = $this->getIndexName($model);
         }
 
-        $env_suffix = property_exists($model, 'per_environment') && $model->per_environment === true ? '_'.\App::environment() : '';
+        $env_suffix = property_exists($model, 'perEnvironment') && $model->perEnvironment === true ? '_'.\App::environment() : '';
 
         $indices = array_map(function ($index_name) use ($env_suffix) {
             return $this->algolia->initIndex($index_name.$env_suffix.'_tmp');

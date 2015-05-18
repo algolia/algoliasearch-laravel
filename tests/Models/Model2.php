@@ -9,8 +9,8 @@ class Model2 extends Model
 {
     use AlgoliaEloquentTrait;
 
-    public static $auto_index = false;
-    public static $auto_delete = false;
+    public static $autoIndex = false;
+    public static $autoDelete = false;
 
     protected $primaryKey = 'id2';
 

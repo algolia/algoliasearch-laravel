@@ -9,5 +9,5 @@ class Model5 extends Model
 {
     use AlgoliaEloquentTrait;
 
-    public $per_environment = true;
+    public $perEnvironment = true;
 }
