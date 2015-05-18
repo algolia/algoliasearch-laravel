@@ -250,7 +250,7 @@ Contact::reindex()
 To reindex all your records (in place, without deleting out-dated records):
 
 ```php
-Contact.reindex(false)
+Contact::reindex(false)
 ```
 
 #### Clearing an index
@@ -326,5 +326,5 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 To search using an extra index, use the following code:
 
 ```php
-Book.search('foo bar', ['index' => 'contacts_desc']);
+Book::search('foo bar', ['index' => 'contacts_desc']);
 ```
