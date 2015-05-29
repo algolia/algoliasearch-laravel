@@ -9,8 +9,8 @@
         "api"
     ],
     "require": {
-    	"php": ">=5.4.0",
-        "algolia/algoliasearch-laravel-manager": "1.1.2"
+    	"php": ">=5.5.9",
+        "vinkla/algolia": "~1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
