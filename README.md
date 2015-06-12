@@ -291,7 +291,7 @@ class Contact extends Model
     	],
     ];
 
-    public $slaves_settings = [
+    public $slavesSettings = [
         'contacts_desc' => [
             'ranking' => [
                 'desc(name)',
