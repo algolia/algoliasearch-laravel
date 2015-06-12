@@ -26,7 +26,7 @@ Add `algolia/algoliasearch-laravel` to your `composer.json` file:
 composer require algolia/algoliasearch-laravel
 ```
 
-Add the service provider to ```config/app.php``` in the `providers` array.
+Add the service provider to `config/app.php` in the `providers` array.
 
 ```php
 AlgoliaSearch\Laravel\AlgoliaServiceProvider::class
@@ -44,7 +44,7 @@ This will create a `config/algolia.php` file in your app that you can modify to 
 
 ## Quick Start
 
-The following code will create a <code>Contact</code> add search capabilities to your <code>Contact</code> model:
+The following code will create a `Contact` add search capabilities to your `Contact` model:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -68,11 +68,9 @@ class Contact extends Model
     
     public function getAlgoliaRecord()
     {
-        $extraData = [
+        return array_merge($this->toArray(), [
             'custom_name' => 'Custom Name'
-        ];
-
-        return array_merge($this->toArray(), $extraData);
+        ]);
     }
 }
 ```
@@ -89,8 +87,14 @@ class Contact extends Model
     use AlgoliaEloquentTrait;
     
     public $algoliaSettings = [
-    	'attributesToIndex => ['id', 'name'],
-    	'customRanking => ['desc(popularity)', 'asc(name)'],
+    	'attributesToIndex' => [
+    		'id', 
+    		'name',
+    	],
+    	'customRanking => [
+    		'desc(popularity)', 
+    		'asc(name)',
+    	],
     ];
 }
 ```
@@ -119,10 +123,10 @@ index.search('something', function(success, hits) {
 
 #### Backend Search
 
-You could also use `search` but it's not recommended. This method will search on Algolia
+You could also use `search` but it's not recommended. This method will search on Algolia.
 
 ```php
-Contact::search("jon doe");
+Contact::search('jon doe');
 ```
 
 ## Options
@@ -134,7 +138,9 @@ Each time a record is saved; it will be - asynchronously - indexed. On the other
 You can disable auto-indexing and auto-removing setting the following options:
    
 ```php
-class Contact extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
 {
 	use AlgoliaEloquentTrait;
     
@@ -158,10 +164,12 @@ Contact::reindex(); // Will use batch operations.
 
 #### Custom Index Name
 
-By default, the index name will be the class name pluriazed, e.g. "Contacts". You can customize the index name by using the `indices` option:
+By default, the index name will be the class name pluriazed, e.g. "Contacts". You can customize the index name by using the `$indices` option:
 
 ```php
-class Contact extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
 {
     use AlgoliaEloquentTrait;
     
@@ -174,20 +182,24 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 You can suffix the index name with the current Rails environment using the following option:
 
 ```php
-class Contact extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
 {
     use AlgoliaEloquentTrait;
     
-    public $perEnvironment = true; # index name will be "Contacts_{\App::environnement()}"
+    public $perEnvironment = true; // Index name will be 'Contacts_{\App::environnement()}';
 }
 ```
 
-#### Custom ```objectID```
+#### Custom `objectID`
 
 By default, the `objectID` is based on your record's keyName (`id` by default). You can change this behavior specifying the `object_id_key` option (be sure to use a uniq field).
 
 ```php
-class Contact extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
 {
     use AlgoliaEloquentTrait;
     
@@ -197,20 +209,18 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 
 #### Restrict Indexing to a Subset of Your Data
 
-You can add constraints controlling if a record must be indexed by defining indexOnly function.
+You can add constraints controlling if a record must be indexed by defining `indexOnly()` method.
 
 ```php
-class Contact extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
 {
    	use AlgoliaEloquentTrait;
     
 	public function indexOnly($index_name)
 	{
-		if ($condition) {
-	   	   	return 1;
-		}
-	   	
-	   	return 0;
+		return (bool) $condition;
 	}
 }
 ```
@@ -219,41 +229,41 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 
 #### Manual Indexing
 
-You can trigger indexing using the <code>pushToindex</code> instance method.
+You can trigger indexing using the `pushToindex()` instance method.
 
 ```php
-$c = Contact::firstOrCreate(['name' => 'Jean']);
-$c->pushToindex();
+$contact = Contact::firstOrCreate(['name' => 'Jean']);
+$contact->pushToindex();
 ```
 
 #### Manual Removal
 
-And trigger index removing using the <code>removeFromIndex</code> instance method.
+And trigger index removing using the `removeFromIndex()` instance method.
 
 ```php
-$c = Contact::firstOrCreate(['name' => 'Jean']);
-$c->removeFromindex();
+$contact = Contact::firstOrCreate(['name' => 'Jean']);
+$contact->removeFromindex();
 ```
 #### Reindexing
 
-To *safely* reindex all your records (index to a temporary index + move the temporary index to the current one atomically), use the <code>reindex</code> class method:
+To *safely* reindex all your records (index to a temporary index + move the temporary index to the current one atomically), use the `reindex` class method:
 
 ```php
-Contact::reindex()
+Contact::reindex();
 ```
 
 To reindex all your records (in place, without deleting out-dated records):
 
 ```php
-Contact::reindex(false)
+Contact::reindex(false);
 ```
 
 #### Clearing an Index
 
-To clear an index, use the <code>clear_index!</code> class method:
+To clear an index, use the `clear_index!` class method:
 
 ```ruby
-Contact::clearIndices()
+Contact::clearIndices();
 ```
 
 ## Master/Slave
@@ -261,14 +271,24 @@ Contact::clearIndices()
 You can define slave indexes in the `$algolia_settings` variable:
 
 ```php
-class Contact extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
 {
 	 use AlgoliaEloquentTrait;
     
 	 public $algoliaSettings = [
-		'attributesToIndex'    => ['id', 'name'],
-    	'customRanking'        => ['desc(popularity)', 'asc(name)'],
-    	'slaves'               => ['contacts_desc']
+		'attributesToIndex' => [
+			'id', 
+			'name',
+		],
+    	'customRanking' => [
+    		'desc(popularity)', 
+    		'asc(name)',
+    	],
+    	'slaves' => [
+    		'contacts_desc',
+    	],
     ];
 
     public $slaves_settings = [
@@ -305,7 +325,10 @@ class Contact extends Model
 {
 	use AlgoliaEloquentTrait;
     
-	public $indices = ['contact_public', 'contact_private'];
+	public $indices = [
+		'contact_public', 
+		'contact_private',
+	];
     
 	public function indexOnly($indexName)
 	{
