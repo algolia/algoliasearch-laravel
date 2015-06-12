@@ -91,7 +91,7 @@ class Contact extends Model
     		'id', 
     		'name',
     	],
-    	'customRanking => [
+    	'customRanking' => [
     		'desc(popularity)', 
     		'asc(name)',
     	],
