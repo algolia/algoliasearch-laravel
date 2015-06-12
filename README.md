@@ -1,45 +1,38 @@
-Algolia Search for Laravel
-==================
+# Laravel Algolia Search
 
-This php package integrate the Algolia Search API to your favorite Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package. Php 5.4+ is supported.
+This php package integrate the Algolia Search API to your favorite Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package. PHP 5.5.9+ is supported.
 
 [![Build Status](https://img.shields.io/travis/algolia/algoliasearch-laravel/master.svg?style=flat)](https://travis-ci.org/algolia/algoliasearch-laravel)
 [![Latest Version](https://img.shields.io/github/release/algolia/algoliasearch-laravel.svg?style=flat)](https://github.com/algolia/algoliasearch-laravel/releases)
 [![License](https://img.shields.io/packagist/l/algolia/algoliasearch-laravel.svg?style=flat)](https://packagist.org/packages/algolia/algoliasearch-laravel)
 
-Table of Content
--------------
-**Get started**
+## Table of Content
 
 1. [Install](#install)
-1. [Configuration](#configuration)
-1. [Quick Start](#quick-start)
-1. [Ranking & Relevance](#ranking--relevance)
-1. [Options](#options)
-1. [Indexing](#indexing)
-1. [Master/Slave](#masterslave)
-1. [Target multiple indexes](#target-multiple-indexes)
-1. [Search](#search)
+2. [Configuration](#configuration)
+3. [Quick Start](#quick-start)
+4. [Ranking & Relevance](#ranking--relevance)
+5. [Options](#options)
+6. [Indexing](#indexing)
+7. [Master/Slave](#masterslave)
+8. [Target multiple indexes](#target-multiple-indexes)
+9. [Search](#search)
 
-Install
--------------
+## Install
 
 Add `algolia/algoliasearch-laravel` to your `composer.json` file:
 
-```json
-  "require": {
-      "algolia/algoliasearch-laravel": "master"
-  }
+```bash
+composer require algolia/algoliasearch-laravel
 ```
 
 Add the service provider to ```config/app.php``` in the `providers` array.
 
 ```php
-'AlgoliaSearch\Laravel\AlgoliaServiceProvider'
+AlgoliaSearch\Laravel\AlgoliaServiceProvider::class
 ```
 
-Configuration
--------------
+## Configuration
 
 Laravel Algolia requires connection configuration. To get started, you'll need to publish all vendor assets:
 
@@ -49,15 +42,14 @@ php artisan vendor:publish
 
 This will create a `config/algolia.php` file in your app that you can modify to set your configuration. Also, make sure you check for changes to the original config file in this package between releases.
 
-
-
-Quick Start
--------------
+## Quick Start
 
 The following code will create a <code>Contact</code> add search capabilities to your <code>Contact</code> model:
 
 ```php
-class Contact extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
 {
     use AlgoliaEloquentTrait;
 }
@@ -68,7 +60,9 @@ By default all your visible attributes will be send
 If you want to send specific attributes you can do something like
 
 ```php
-class Contact extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
 {
     use AlgoliaEloquentTrait;
     
@@ -88,14 +82,16 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 We provide many ways to configure your index allowing you to tune your overall index relevancy. The most important ones are the **searchable attributes** and the attributes reflecting **record popularity**.
 
 ```php
-class Contact extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
 {
     use AlgoliaEloquentTrait;
     
     public $algoliaSettings = [
     	'attributesToIndex => ['id', 'name'],
-    	'customRanking => ['desc(popularity)'], 'asc(name)]'
-    ]
+    	'customRanking => ['desc(popularity)', 'asc(name)'],
+    ];
 }
 ```
 
@@ -129,10 +125,9 @@ You could also use `search` but it's not recommended. This method will search on
 Contact::search("jon doe");
 ```
 
-Options
-----------
+## Options
 
-#### Auto-indexing & asynchronism
+#### Auto-indexing & Asynchronism
 
 Each time a record is saved; it will be - asynchronously - indexed. On the other hand, each time a record is destroyed, it will be - asynchronously - removed from the index.
 
@@ -152,15 +147,16 @@ You can temporary disable auto-indexing. This is often used for performance reas
 
 ```php
 Contact::$autoIndex = false;
-Contact.clearIndices();
+Contact::clearIndices();
 
-for ($i = 0; $i < 10000; $i++)
+for ($i = 0; $i < 10000; $i++) {
 	$contact = Contact::firstOrCreate(['name' => 'Jean']);
+}
 
-Contact::reindex() # will use batch operations
+Contact::reindex(); // Will use batch operations.
 ```
 
-#### Custom index name
+#### Custom Index Name
 
 By default, the index name will be the class name pluriazed, e.g. "Contacts". You can customize the index name by using the `indices` option:
 
@@ -173,7 +169,7 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 }
 ```
 
-#### Per-environment indexes
+#### Per-environment Indexes
 
 You can suffix the index name with the current Rails environment using the following option:
 
@@ -199,7 +195,7 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 }
 ```
 
-#### Restrict indexing to a subset of your data
+#### Restrict Indexing to a Subset of Your Data
 
 You can add constraints controlling if a record must be indexed by defining indexOnly function.
 
@@ -219,10 +215,9 @@ class Contact extends \Illuminate\Database\Eloquent\Model
 }
 ```
 
-Indexing
----------
+## Indexing
 
-#### Manual indexing
+#### Manual Indexing
 
 You can trigger indexing using the <code>pushToindex</code> instance method.
 
@@ -231,7 +226,7 @@ $c = Contact::firstOrCreate(['name' => 'Jean']);
 $c->pushToindex();
 ```
 
-#### Manual removal
+#### Manual Removal
 
 And trigger index removing using the <code>removeFromIndex</code> instance method.
 
@@ -253,7 +248,7 @@ To reindex all your records (in place, without deleting out-dated records):
 Contact::reindex(false)
 ```
 
-#### Clearing an index
+#### Clearing an Index
 
 To clear an index, use the <code>clear_index!</code> class method:
 
@@ -261,8 +256,7 @@ To clear an index, use the <code>clear_index!</code> class method:
 Contact::clearIndices()
 ```
 
-Master/slave
----------
+## Master/Slave
 
 You can define slave indexes in the `$algolia_settings` variable:
 
@@ -300,24 +294,22 @@ To search using a slave, use the following code:
 Book.search('foo bar', ['index' => 'contacts_desc']);
 ```
 
-Target multiple indexes
----------
+## Target Multiple Indexes
 
 You can index a record in several indexes using the <code>add_index</code> method:
 
 ```php
-class Contact extends \Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
 {
 	use AlgoliaEloquentTrait;
     
-	public $indices = ["contact_public", "contact_private"];
+	public $indices = ['contact_public', 'contact_private'];
     
 	public function indexOnly($indexName)
 	{
-		if ($indexName == "contact_public")
-   			return $this->isPublic == 1;
-   			
-   	   	return $this->isPublic == 0;
+		return $indexName === 'contact_public';
 	}
 
 }
@@ -328,3 +320,8 @@ To search using an extra index, use the following code:
 ```php
 Book::search('foo bar', ['index' => 'contacts_desc']);
 ```
+
+## License
+
+Laravel Algolia Search is licensed under [The MIT License (MIT)](LICENSE).
+
