@@ -18,12 +18,4 @@ class AlgoliaServiceProvider extends ServiceProvider
     {
         $this->app->register('Vinkla\Algolia\AlgoliaServiceProvider');
     }
-
-    public function provides()
-    {
-        return [
-            'algolia',
-            'algolia.factory',
-        ];
-    }
 }
