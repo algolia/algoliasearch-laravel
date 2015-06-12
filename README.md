@@ -173,7 +173,7 @@ class Contact extends Model
 {
     use AlgoliaEloquentTrait;
     
-    public $indices = ["contact_all"];
+    public $indices = ['contact_all'];
 }
 ```
 
