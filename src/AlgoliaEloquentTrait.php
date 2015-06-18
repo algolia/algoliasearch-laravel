@@ -131,11 +131,28 @@ trait AlgoliaEloquentTrait
     {
         $instance = new static();
         $overload_method = '_'.$method;
+
         if (method_exists($instance, $overload_method)) {
             return call_user_func_array([$instance, $overload_method], $parameters);
         }
 
         return parent::__callStatic($method, $parameters);
+    }
+
+    /**
+     * @param $method
+     * @param $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        $overload_method = '_'.$method;
+
+        if (method_exists($this, $overload_method)) {
+            return call_user_func_array([$this, $overload_method], $parameters);
+        }
+
+        return parent::__call($method, $parameters);
     }
 
     /**
