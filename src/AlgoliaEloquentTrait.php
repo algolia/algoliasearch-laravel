@@ -122,15 +122,18 @@ trait AlgoliaEloquentTrait
         }
     }
 
+    /**
+     * @param $method
+     * @param $parameters
+     * @return mixed
+     */
     public static function __callStatic($method, $parameters)
     {
         $instance = new static();
-
-        $method = '_'.$method;
-
-        if (method_exists($instance, $method));
-
-        return call_user_func_array([$instance, $method], $parameters);
+        $overload_method = '_'.$method;
+        if (method_exists($instance, $overload_method)) {
+            return call_user_func_array([$instance, $overload_method], $parameters);
+        }
 
         return parent::__callStatic($method, $parameters);
     }
