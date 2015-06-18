@@ -143,6 +143,8 @@ trait AlgoliaEloquentTrait
      * @param $method
      * @param $parameters
      * @return mixed
+     *
+     * Catch static calls call from within a class. Example : static::method();
      */
     public function __call($method, $parameters)
     {
