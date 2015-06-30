@@ -10,7 +10,7 @@
     ],
     "require": {
     	"php": ">=5.5.9",
-        "vinkla/algolia": "~1.1"
+        "vinkla/algolia": "~2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
