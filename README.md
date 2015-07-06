@@ -144,8 +144,8 @@ class Contact extends Model
 {
 	use AlgoliaEloquentTrait;
     
-	public $autoIndex = false;
-	public $autoDelete = false;
+	public static $autoIndex = false;
+	public static $autoDelete = false;
 }
 ```
  
