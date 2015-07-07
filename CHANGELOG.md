@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.3 (release 2015-07-07)
+
+- Improve Documentation
+- Add constistency for trait attributes
+- Add browse and browseFrom method
+
 ## 1.0.2 (release 2015-06-30)
 
 - Update vinkla/algolia
