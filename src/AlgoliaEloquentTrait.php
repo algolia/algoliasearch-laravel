@@ -63,6 +63,57 @@ trait AlgoliaEloquentTrait
     /**
      * @param $query
      * @param array $parameters
+     * @param $cursor
+     *
+     * @return mixed
+     */
+    public function _browseFrom($query, $parameters = [], $cursor = null)
+    {
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
+        $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
+
+        $index = null;
+
+        if (isset($parameters['index'])) {
+            $index = $modelHelper->getIndex($parameters['index']);
+            unset($parameters['index']);
+        } else {
+            $index = $modelHelper->getIndices($this)[0];
+        }
+
+        $result = $index->browseFrom($query, $parameters, $cursor);
+
+        return $result;
+    }
+
+    /**
+     * @param $query
+     * @param array $parameters
+     *
+     * @return mixed
+     */
+    public function _browse($query, $parameters = [])
+    {
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
+        $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
+
+        $index = null;
+
+        if (isset($parameters['index'])) {
+            $index = $modelHelper->getIndex($parameters['index']);
+            unset($parameters['index']);
+        } else {
+            $index = $modelHelper->getIndices($this)[0];
+        }
+
+        $result = $index->browse($query, $parameters);
+
+        return $result;
+    }
+
+    /**
+     * @param $query
+     * @param array $parameters
      *
      * @return mixed
      */
@@ -80,7 +131,7 @@ trait AlgoliaEloquentTrait
             $index = $modelHelper->getIndices($this)[0];
         }
 
-        $result = $index->search($query, ['hitsPerPage' => 0]);
+        $result = $index->search($query, $parameters);
 
         return $result;
     }

@@ -188,13 +188,13 @@ class Contact extends Model
 {
     use AlgoliaEloquentTrait;
     
-    public $perEnvironment = true; // Index name will be 'Contacts_{\App::environnement()}';
+    public static $perEnvironment = true; // Index name will be 'contacts_{\App::environnement()}';
 }
 ```
 
 #### Custom `objectID`
 
-By default, the `objectID` is based on your record's keyName (`id` by default). You can change this behavior specifying the `object_id_key` option (be sure to use a uniq field).
+By default, the `objectID` is based on your record's keyName (`id` by default). You can change this behavior specifying the `objectIdKey` option (be sure to use a uniq field).
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -203,7 +203,7 @@ class Contact extends Model
 {
     use AlgoliaEloquentTrait;
     
-	public $objectIdKey = 'new_key';
+	public static $objectIdKey = 'new_key';
 }
 ```
 
@@ -229,7 +229,7 @@ class Contact extends Model
 
 #### Manual Indexing
 
-You can trigger indexing using the `pushToindex()` instance method.
+You can trigger indexing using the `pushToindex` instance method.
 
 ```php
 $contact = Contact::firstOrCreate(['name' => 'Jean']);
@@ -238,7 +238,7 @@ $contact->pushToindex();
 
 #### Manual Removal
 
-And trigger index removing using the `removeFromIndex()` instance method.
+And trigger index removing using the `removeFromIndex` instance method.
 
 ```php
 $contact = Contact::firstOrCreate(['name' => 'Jean']);
@@ -260,7 +260,7 @@ Contact::reindex(false);
 
 #### Clearing an Index
 
-To clear an index, use the `clear_index!` class method:
+To clear an index, use the `clearIndices` class method:
 
 ```ruby
 Contact::clearIndices();
@@ -316,7 +316,7 @@ Book.search('foo bar', ['index' => 'contacts_desc']);
 
 ## Target Multiple Indexes
 
-You can index a record in several indexes using the <code>add_index</code> method:
+You can index a record in several indexes using the <code>indexOnly</code> method:
 
 ```php
 use Illuminate\Database\Eloquent\Model;

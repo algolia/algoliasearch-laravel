@@ -51,7 +51,7 @@ class ModelHelper
 
     public function getObjectIdKey(Model $model)
     {
-        return property_exists($model, 'objectIdKey') ? $model->objectIdKey : $model->getKeyName();
+        return property_exists($model, 'objectIdKey') ? $model::$objectIdKey : $model->getKeyName();
     }
 
     public function getSettings(Model $model)
@@ -77,7 +77,7 @@ class ModelHelper
             $indicesName[] = $this->getIndexName($model);
         }
 
-        $env_suffix = property_exists($model, 'perEnvironment') && $model->perEnvironment === true ? '_'.\App::environment() : '';
+        $env_suffix = property_exists($model, 'perEnvironment') && $model::$perEnvironment === true ? '_'.\App::environment() : '';
 
         $indices = array_map(function ($index_name) use ($env_suffix) {
             return $this->algolia->initIndex($index_name.$env_suffix);
@@ -96,7 +96,7 @@ class ModelHelper
             $indicesName[] = $this->getIndexName($model);
         }
 
-        $env_suffix = property_exists($model, 'perEnvironment') && $model->perEnvironment === true ? '_'.\App::environment() : '';
+        $env_suffix = property_exists($model, 'perEnvironment') && $model::$perEnvironment === true ? '_'.\App::environment() : '';
 
         $indices = array_map(function ($index_name) use ($env_suffix) {
             return $this->algolia->initIndex($index_name.$env_suffix.'_tmp');

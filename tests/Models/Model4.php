@@ -9,11 +9,11 @@ class Model4 extends Model
 {
     use AlgoliaEloquentTrait;
 
-    public $objectIdKey = 'id3';
+    public static $objectIdKey = 'id3';
 
     protected $primaryKey = 'id2';
 
-    public $perEnvironment = false;
+    public static $perEnvironment = false;
 
     public function __construct()
     {
