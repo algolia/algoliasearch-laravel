@@ -332,7 +332,7 @@ class Contact extends Model
     
 	public function indexOnly($indexName)
 	{
-		if ($indexName == 'contact_public)
+		if ($indexName == 'contact_public')
 			return true;
 
 		return $this->private;
