@@ -308,15 +308,15 @@ class Contact extends Model
 }
 ```
 
-To search using a slave, use the following code:
+To search using a slave use the following code:
 
 ```php
-Book.search('foo bar', ['index' => 'contacts_desc']);
+Book::search('foo bar', ['index' => 'contacts_desc']);
 ```
 
 ## Target Multiple Indexes
 
-You can index a record in several indexes using the <code>indexOnly</code> method:
+You can index a record in several indexes using the <code>$indices</code> property:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -332,7 +332,10 @@ class Contact extends Model
     
 	public function indexOnly($indexName)
 	{
-		return $indexName === 'contact_public';
+		if ($indexName == 'contact_public)
+			return true;
+
+		return $this->private;
 	}
 
 }
@@ -341,7 +344,7 @@ class Contact extends Model
 To search using an extra index, use the following code:
 
 ```php
-Book::search('foo bar', ['index' => 'contacts_desc']);
+Book::search('foo bar', ['index' => 'contacts_private']);
 ```
 
 ## License
