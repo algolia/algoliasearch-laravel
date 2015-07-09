@@ -40,7 +40,7 @@ class AlgoliaEloquentTraitTest extends TestCase
 
         $index->shouldReceive('addObject')->times(2)->with((new Model4())->getAlgoliaRecordDefault());
 
-        $this->assertEquals(null, (new Model4())->pushToindex());
+        $this->assertEquals(null, (new Model4())->pushToIndex());
     }
 
     public function testRemoveFromIndex()

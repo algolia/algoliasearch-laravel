@@ -231,7 +231,7 @@ You can trigger indexing using the `pushToIndex` instance method.
 
 ```php
 $contact = Contact::firstOrCreate(['name' => 'Jean']);
-$contact->pushToindex();
+$contact->pushToIndex();
 ```
 
 #### Manual Removal
@@ -240,7 +240,7 @@ And trigger the removing using the `removeFromIndex` instance method.
 
 ```php
 $contact = Contact::firstOrCreate(['name' => 'Jean']);
-$contact->removeFromindex();
+$contact->removeFromIndex();
 ```
 #### Reindexing
 
