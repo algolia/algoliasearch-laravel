@@ -227,7 +227,7 @@ class Contact extends Model
 
 #### Manual Indexing
 
-You can trigger indexing using the `pushToindex` instance method.
+You can trigger indexing using the `pushToIndex` instance method.
 
 ```php
 $contact = Contact::firstOrCreate(['name' => 'Jean']);
@@ -236,7 +236,7 @@ $contact->pushToindex();
 
 #### Manual Removal
 
-And trigger the removing using the `removeFromindex` instance method.
+And trigger the removing using the `removeFromIndex` instance method.
 
 ```php
 $contact = Contact::firstOrCreate(['name' => 'Jean']);
