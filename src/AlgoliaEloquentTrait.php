@@ -231,7 +231,7 @@ trait AlgoliaEloquentTrait
         return $record;
     }
 
-    public function pushToindex()
+    public function pushToIndex()
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
