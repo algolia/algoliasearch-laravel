@@ -1,6 +1,6 @@
 # Laravel Algolia Search
 
-This php package integrate the Algolia Search API to your favorite Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package. PHP 5.5.9+ is supported.
+This PHP package integrates the Algolia Search API to your favorite Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package. PHP 5.5.9+ is supported.
 
 [![Build Status](https://img.shields.io/travis/algolia/algoliasearch-laravel/master.svg?style=flat)](https://travis-ci.org/algolia/algoliasearch-laravel)
 [![Latest Version](https://img.shields.io/github/release/algolia/algoliasearch-laravel.svg?style=flat)](https://github.com/algolia/algoliasearch-laravel/releases)
@@ -34,17 +34,17 @@ AlgoliaSearch\Laravel\AlgoliaServiceProvider::class
 
 ## Configuration
 
-Laravel Algolia requires connection configuration. To get started, you'll need to publish all vendor assets:
+Laravel Algolia requires a connection configuration. To get started, you'll need to publish all vendor assets:
 
 ```bash
 php artisan vendor:publish
 ```
 
-This will create a `config/algolia.php` file in your app that you can modify to set your configuration. Also, make sure you check for changes to the original config file in this package between releases.
+This will create a `config/algolia.php` file in your app that you can modify to set your configuration. Also, make sure you check for changes compared to the original config file after an upgrade.
 
 ## Quick Start
 
-The following code will create a `Contact` add search capabilities to your `Contact` model:
+The following code adds search capabilities to your `Contact` model creating a `Contact` index:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -55,9 +55,7 @@ class Contact extends Model
 }
 ```
 
-By default all your visible attributes will be send
-
-If you want to send specific attributes you can do something like
+By default all visible attributes are sent. If you want to send specific attributes you can do something like:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -77,7 +75,7 @@ class Contact extends Model
 
 #### Ranking & Relevance
 
-We provide many ways to configure your index allowing you to tune your overall index relevancy. The most important ones are the **searchable attributes** and the attributes reflecting **record popularity**.
+We provide many ways to configure your index settings to tune the overall relevancy but the most important ones are the **searchable attributes** and the attributes reflecting the **record popularity**. You can configure them with the following code:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -99,7 +97,7 @@ class Contact extends Model
 }
 ```
 
-You can then do a save the settings to algolia using the setSetting method
+You can propagate (save) the settings to algolia using the `setSetting` method:
 
 ```php
 Contact::setSettings();
@@ -109,7 +107,7 @@ Contact::setSettings();
 
 Traditional search implementations tend to have search logic and functionality on the backend. This made sense when the search experience consisted of a user entering a search query, executing that search, and then being redirected to a search result page.
 
-Implementing search on the backend is no longer necessary. In fact, in most cases it is harmful to performance because of added network and processing latency. We highly recommend the usage of our [JavaScript API Client](https://github.com/algolia/algoliasearch-client-js) issuing all search requests directly from the end user's browser, mobile device, or client. It will reduce the overall search latency while offloading your servers at the same time.
+Implementing search on the backend is no longer necessary. In fact, in most cases it is harmful to performance because of the extra network and processing latency. We highly recommend the usage of our [JavaScript API Client](https://github.com/algolia/algoliasearch-client-js) issuing all search requests directly from the end user's browser, mobile device, or client. It will reduce the overall search latency while offloading your servers at the same time.
 
 In your JavaScript code you can do:
 
@@ -123,7 +121,7 @@ index.search('something', function(success, hits) {
 
 #### Backend Search
 
-You could also use `search` but it's not recommended. This method will search on Algolia.
+You could also use the `search` method but it's not recommended to implement instant/realtime search experience:
 
 ```php
 Contact::search('jon doe');
@@ -135,7 +133,7 @@ Contact::search('jon doe');
 
 Each time a record is saved; it will be - asynchronously - indexed. On the other hand, each time a record is destroyed, it will be - asynchronously - removed from the index.
 
-You can disable auto-indexing and auto-removing setting the following options:
+You can disable the auto-indexing and auto-removing setting the following options:
    
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -164,7 +162,7 @@ Contact::reindex(); // Will use batch operations.
 
 #### Custom Index Name
 
-By default, the index name will be the class name pluriazed, e.g. "Contacts". You can customize the index name by using the `$indices` option:
+By default, the index name will be the pluralized class name, e.g. "Contacts". You can customize the index name by using the `$indices` option:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -179,7 +177,7 @@ class Contact extends Model
 
 #### Per-environment Indexes
 
-You can suffix the index name with the current Rails environment using the following option:
+You can suffix the index name with the current App environment using the following option:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -188,13 +186,13 @@ class Contact extends Model
 {
     use AlgoliaEloquentTrait;
     
-    public static $perEnvironment = true; // Index name will be 'contacts_{\App::environnement()}';
+    public static $perEnvironment = true; // Index name will be 'Contacts_{\App::environnement()}';
 }
 ```
 
 #### Custom `objectID`
 
-By default, the `objectID` is based on your record's keyName (`id` by default). You can change this behavior specifying the `objectIdKey` option (be sure to use a uniq field).
+By default, the `objectID` is based on your record's `keyName` (`id` by default). You can change this behavior specifying the `objectIdKey` option (be sure to use a uniq field).
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -209,7 +207,7 @@ class Contact extends Model
 
 #### Restrict Indexing to a Subset of Your Data
 
-You can add constraints controlling if a record must be indexed by defining `indexOnly()` method.
+You can add constraints controlling if a record must be indexed by defining the `indexOnly()` method.
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -238,7 +236,7 @@ $contact->pushToindex();
 
 #### Manual Removal
 
-And trigger index removing using the `removeFromIndex` instance method.
+And trigger the removing using the `removeFromindex` instance method.
 
 ```php
 $contact = Contact::firstOrCreate(['name' => 'Jean']);
@@ -268,7 +266,7 @@ Contact::clearIndices();
 
 ## Master/Slave
 
-You can define slave indexes in the `$algolia_settings` variable:
+You can define slave indexes using the `$algolia_settings` variable:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
