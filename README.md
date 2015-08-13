@@ -225,6 +225,47 @@ class Contact extends Model
 }
 ```
 
+### Relashionships
+
+By default the Algolia package will fetch the **loaded** relashionships.
+
+If you index records that didn't yet load any relations you can do it by loading them in the ```getAlgoliaRecord``` that you can create in your model.
+
+It will look like:
+
+```
+public function getAlgoliaRecord()
+{
+	/**
+	 * Load the categories relation so that it's available
+	 * 	in the laravel toArray method
+	 */
+	$this->categories; 
+  
+   return $this->toArray();
+}
+```
+
+In the resulted object you will have categories converted to array by Laravel. If you a custom relation structure you will instead do something like :
+
+```
+public function getAlgoliaRecord()
+{
+	/**
+	 * Load the categories relation so that it's available
+	 * 	in the laravel toArray method
+	 */
+	$extra_data = [];
+	$extra_data['categories'] = array_map(function ($data) {
+							            return $data['name'];
+						        }, $this->categories->toArray();
+  
+   return array_merge($this->toArray(), $extra_data);
+}
+```
+
+
+
 ## Indexing
 
 #### Manual Indexing
