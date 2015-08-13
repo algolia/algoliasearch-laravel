@@ -229,7 +229,7 @@ class Contact extends Model
 
 By default the Algolia package will fetch the **loaded** relashionships.
 
-If you index records that didn't yet load any relations you can do it by loading them in the ```getAlgoliaRecord``` that you can create in your model.
+If you want to index records that didn't yet load any relations you can do it by loading them in the ```getAlgoliaRecord``` that you can create in your model.
 
 It will look like:
 
@@ -246,7 +246,7 @@ public function getAlgoliaRecord()
 }
 ```
 
-In the resulted object you will have categories converted to array by Laravel. If you a custom relation structure you will instead do something like :
+In the resulted object you will have categories converted to array by Laravel. If you want a custom relation structure you will instead do something like :
 
 ```
 public function getAlgoliaRecord()
