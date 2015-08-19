@@ -225,9 +225,9 @@ class Contact extends Model
 }
 ```
 
-### Relashionships
+### Relationships
 
-By default the Algolia package will fetch the **loaded** relashionships.
+By default the Algolia package will fetch the **loaded** relationships.
 
 If you want to index records that didn't yet load any relations you can do it by loading them in the ```getAlgoliaRecord``` that you can create in your model.
 
