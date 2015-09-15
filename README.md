@@ -388,6 +388,10 @@ To search using an extra index, use the following code:
 Book::search('foo bar', ['index' => 'contacts_private']);
 ```
 
+## Compatibility
+
+Compatible with 5.x applications
+
 ## License
 
 Laravel Algolia Search is licensed under [The MIT License (MIT)](LICENSE).
