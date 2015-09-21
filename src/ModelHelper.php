@@ -67,11 +67,13 @@ class ModelHelper
     /**
      * @return \AlgoliaSearch\Index
      */
-    public function getIndices(Model $model)
+    public function getIndices(Model $model, $indexName = null)
     {
         $indicesName = [];
 
-        if (property_exists($model, 'indices') && is_array($model->indices)) {
+        if ($indexName !== null) {
+            $indicesName[] = $indexName;
+        } elseif (property_exists($model, 'indices') && is_array($model->indices)) {
             $indicesName = $model->indices;
         } else {
             $indicesName[] = $this->getIndexName($model);

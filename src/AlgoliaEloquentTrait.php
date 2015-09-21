@@ -75,7 +75,7 @@ trait AlgoliaEloquentTrait
         $index = null;
 
         if (isset($parameters['index'])) {
-            $index = $modelHelper->getIndex($parameters['index']);
+            $index = $modelHelper->getIndices($this, $parameters['index'])[0];
             unset($parameters['index']);
         } else {
             $index = $modelHelper->getIndices($this)[0];
@@ -100,7 +100,7 @@ trait AlgoliaEloquentTrait
         $index = null;
 
         if (isset($parameters['index'])) {
-            $index = $modelHelper->getIndex($parameters['index']);
+            $index = $modelHelper->getIndices($this, $parameters['index'])[0];
             unset($parameters['index']);
         } else {
             $index = $modelHelper->getIndices($this)[0];
@@ -125,7 +125,7 @@ trait AlgoliaEloquentTrait
         $index = null;
 
         if (isset($parameters['index'])) {
-            $index = $modelHelper->getIndex($parameters['index']);
+            $index = $modelHelper->getIndices($this, $parameters['index'])[0];
             unset($parameters['index']);
         } else {
             $index = $modelHelper->getIndices($this)[0];

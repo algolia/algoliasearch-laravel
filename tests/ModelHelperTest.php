@@ -60,6 +60,8 @@ class ModelHelperTest extends TestCase
     {
         $this->assertEquals('model1s', $this->modelHelper->getIndices(new Model1())[0]->indexName);
         $this->assertEquals('model5s_testing', $this->modelHelper->getIndices(new Model5())[0]->indexName);
+        $this->assertEquals('test', $this->modelHelper->getIndices(new Model1(), 'test')[0]->indexName);
+        $this->assertEquals('test_testing', $this->modelHelper->getIndices(new Model5(), 'test')[0]->indexName);
         $this->assertEquals('model4s', $this->modelHelper->getIndices(new Model4())[0]->indexName);
 
         $indices = $this->modelHelper->getIndices(new Model2());
