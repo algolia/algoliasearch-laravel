@@ -6,6 +6,10 @@ This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. 
 [![Latest Version](https://img.shields.io/github/release/algolia/algoliasearch-laravel.svg?style=flat)](https://github.com/algolia/algoliasearch-laravel/releases)
 [![License](https://img.shields.io/packagist/l/algolia/algoliasearch-laravel.svg?style=flat)](https://packagist.org/packages/algolia/algoliasearch-laravel)
 
+# Laravel 4
+
+Checkout the [algoliasearch-laravel-4](https://github.com/algolia/algoliasearch-laravel-4) repository
+
 ## Table of Content
 
 1. [Install](#install)
