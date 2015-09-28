@@ -3,7 +3,6 @@
 namespace AlgoliaSearch\Laravel;
 
 use Illuminate\Database\Eloquent\Model;
-use Vinkla\Algolia\AlgoliaManager;
 
 class ModelHelper
 {
