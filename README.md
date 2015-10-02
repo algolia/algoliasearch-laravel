@@ -54,6 +54,7 @@ The following code adds search capabilities to your `Contact` model creating a `
 
 ```php
 use Illuminate\Database\Eloquent\Model;
+use AlgoliaSearch\Laravel\AlgoliaEloquentTrait;
 
 class Contact extends Model
 {
