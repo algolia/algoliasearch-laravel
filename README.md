@@ -238,7 +238,7 @@ If you want to index records that didn't yet load any relations you can do it by
 
 It will look like:
 
-```
+```php
 public function getAlgoliaRecord()
 {
 	/**
@@ -253,7 +253,7 @@ public function getAlgoliaRecord()
 
 In the resulted object you will have categories converted to array by Laravel. If you want a custom relation structure you will instead do something like :
 
-```
+```php
 public function getAlgoliaRecord()
 {
 	/**
