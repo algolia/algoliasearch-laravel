@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.5 (release 2015-10-27)
+
+- Fix slaves + env
+
 ## 1.0.3 (release 2015-07-07)
 
 - Improve Documentation
