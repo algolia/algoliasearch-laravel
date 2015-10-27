@@ -147,7 +147,7 @@ trait AlgoliaEloquentTrait
         $slaves_settings = $modelHelper->getSlavesSettings($this);
         $slaves = isset($settings['slaves']) ? $settings['slaves'] : [];
 
-        $b = true;
+        $b = count($slaves) > 0;
 
         /** @var \AlgoliaSearch\Index $index */
         foreach ($indices as $index) {
