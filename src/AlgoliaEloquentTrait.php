@@ -42,7 +42,7 @@ trait AlgoliaEloquentTrait
 
         if ($safe) {
             for ($i = 0; $i < count($indices); $i++) {
-                $modelHelper->algolia->moveIndex($indicesTmp[$i]->indexName, $indices[0]->indexName);
+                $modelHelper->algolia->moveIndex($indicesTmp[$i]->indexName, $indices[$i]->indexName);
             }
         }
     }
