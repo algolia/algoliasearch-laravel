@@ -147,19 +147,22 @@ trait AlgoliaEloquentTrait
         $slaves_settings = $modelHelper->getSlavesSettings($this);
         $slaves = isset($settings['slaves']) ? $settings['slaves'] : [];
 
-        $b = count($slaves) > 0;
+        $b = true;
 
         /** @var \AlgoliaSearch\Index $index */
         foreach ($indices as $index) {
-            if ($b) {
+
+            if ($b && isset($settings['slaves'])) {
                 $settings['slaves'] = array_map(function ($indexName) use ($modelHelper) {
                     return $modelHelper->getFinalIndexName($this, $indexName);
                 }, $settings['slaves']);
             }
 
-            $index->setSettings($settings);
+            if (count(array_keys($settings)) > 0) {
+                $index->setSettings($settings);
+            }
 
-            if ($b) {
+            if ($b && isset($settings['slaves'])) {
                 $b = false;
                 unset($settings['slaves']);
             }
@@ -171,7 +174,8 @@ trait AlgoliaEloquentTrait
 
                 $s = array_merge($settings, $slaves_settings[$slave]);
 
-                $index->setSettings($s);
+                if (count(array_keys($s)) > 0)
+                    $index->setSettings($s);
             }
         }
     }
