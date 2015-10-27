@@ -104,7 +104,7 @@ class ModelHelper
         }
 
         $indices = array_map(function ($index_name) use ($model) {
-            return $this->algolia->initIndex($this->getFinalIndexName($index_name).'_tmp');
+            return $this->algolia->initIndex($this->getFinalIndexName($model, $index_name).'_tmp');
         }, $indicesName);
 
         return $indices;
