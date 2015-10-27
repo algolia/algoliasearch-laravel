@@ -64,6 +64,13 @@ class ModelHelper
         return property_exists($model, 'slavesSettings') ? $model->slavesSettings : [];
     }
 
+    public function getFinalIndexName(Model $model, $indexName)
+    {
+        $env_suffix = property_exists($model, 'perEnvironment') && $model::$perEnvironment === true ? '_'.\App::environment() : '';
+
+        return $indexName.$env_suffix;
+    }
+
     /**
      * @return \AlgoliaSearch\Index
      */
@@ -79,10 +86,8 @@ class ModelHelper
             $indicesName[] = $this->getIndexName($model);
         }
 
-        $env_suffix = property_exists($model, 'perEnvironment') && $model::$perEnvironment === true ? '_'.\App::environment() : '';
-
-        $indices = array_map(function ($index_name) use ($env_suffix) {
-            return $this->algolia->initIndex($index_name.$env_suffix);
+        $indices = array_map(function ($index_name) use ($model) {
+            return $this->algolia->initIndex($this->getFinalIndexName($model, $index_name));
         }, $indicesName);
 
         return $indices;
@@ -98,10 +103,8 @@ class ModelHelper
             $indicesName[] = $this->getIndexName($model);
         }
 
-        $env_suffix = property_exists($model, 'perEnvironment') && $model::$perEnvironment === true ? '_'.\App::environment() : '';
-
-        $indices = array_map(function ($index_name) use ($env_suffix) {
-            return $this->algolia->initIndex($index_name.$env_suffix.'_tmp');
+        $indices = array_map(function ($index_name) use ($model) {
+            return $this->algolia->initIndex($this->getFinalIndexName($index_name).'_tmp');
         }, $indicesName);
 
         return $indices;

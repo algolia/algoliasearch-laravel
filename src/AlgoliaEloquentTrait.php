@@ -142,16 +142,21 @@ trait AlgoliaEloquentTrait
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
 
         $settings = $modelHelper->getSettings($this);
-        $slaves_settings = $modelHelper->getSlavesSettings($this);
-
         $indices = $modelHelper->getIndices($this);
 
+        $slaves_settings = $modelHelper->getSlavesSettings($this);
         $slaves = isset($settings['slaves']) ? $settings['slaves'] : [];
 
         $b = true;
 
         /** @var \AlgoliaSearch\Index $index */
         foreach ($indices as $index) {
+            if ($b) {
+                $settings['slaves'] = array_map(function ($indexName) use ($modelHelper) {
+                    return $modelHelper->getFinalIndexName($this, $indexName);
+                }, $settings['slaves']);
+            }
+
             $index->setSettings($settings);
 
             if ($b) {
@@ -160,15 +165,13 @@ trait AlgoliaEloquentTrait
             }
         }
 
-        if (count($slaves) > 0) {
-            foreach ($slaves as $slave) {
-                if (isset($slaves_settings[$slave])) {
-                    $index = $modelHelper->algolia->initIndex($slave);
+        foreach ($slaves as $slave) {
+            if (isset($slaves_settings[$slave])) {
+                $index = $modelHelper->getIndices($this, $slave)[0];
 
-                    $s = array_merge($settings, $slaves_settings[$slave]);
+                $s = array_merge($settings, $slaves_settings[$slave]);
 
-                    $index->setSettings($s);
-                }
+                $index->setSettings($s);
             }
         }
     }
