@@ -35,7 +35,7 @@ class EloquentSubscriber
 
         /** @var \AlgoliaSearch\Index $index */
         foreach ($this->modelHelper->getIndices($model) as $index) {
-            $index->deleteObject($model->id);
+            $index->deleteObject($this->modelHelper->getObjectId($model));
         }
 
         return true;
