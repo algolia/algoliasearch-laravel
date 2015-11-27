@@ -393,6 +393,24 @@ To search using an extra index, use the following code:
 Book::search('foo bar', ['index' => 'contacts_private']);
 ```
 
+## Eloquent compatibility
+
+Doing :
+
+```
+Ad::where('id', $id)->update($attributes);
+```
+
+will not trigger anything in the model (so no update will happen in Algolia). This is because this is not an Eloquent call,
+it is just a convenient way to generate the query hidden behind the model
+
+To make this query work with Algolia you need to do it like that:
+
+```
+Ad::find($id)->update($attributes);
+```
+
+
 ## Compatibility
 
 Compatible with 5.x applications
