@@ -20,7 +20,6 @@ Checkout the [algoliasearch-laravel-4](https://github.com/algolia/algoliasearch-
 6. [Indexing](#indexing)
 7. [Master/Slave](#masterslave)
 8. [Target multiple indexes](#target-multiple-indexes)
-9. [Search](#search)
 
 ## Install
 
