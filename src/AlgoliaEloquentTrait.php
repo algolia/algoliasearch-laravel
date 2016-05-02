@@ -265,4 +265,14 @@ trait AlgoliaEloquentTrait
             $index->deleteObject($modelHelper->getObjectId($this));
         }
     }
+
+    public function autoIndex()
+    {
+        return (property_exists($this, 'autoIndex') == false || $this::$autoIndex === true);
+    }
+
+    public function autoDelete()
+    {
+        return (property_exists($this, 'autoDelete') == false || $this::$autoDelete === true);
+    }
 }
