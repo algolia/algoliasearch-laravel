@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.0 (release 2016-05-03)
+
+- Add option to dynamically set `autoIndex` and/or `autoDelete` by methods in model.
+
 ## 1.0.5 (release 2015-10-27)
 
 - Fix slaves + env
