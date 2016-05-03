@@ -170,6 +170,40 @@ for ($i = 0; $i < 10000; $i++) {
 Contact::reindex(); // Will use batch operations.
 ```
 
+You can also make a dynamic condition for those two parameters creating an ``autoIndex``` and/or ```autoDelete method```
+on your model
+
+```
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
+{
+	use AlgoliaEloquentTrait;
+
+	public function autoIndex()
+	{
+	    if (\App::environment() === 'test') {
+	        return false;
+	    }
+
+	    return true;
+	}
+
+	public static autoDelete()
+	{
+        if (\App::environment() === 'test') {
+            return false;
+        }
+
+        return true;
+	}
+}
+```
+
+Be careful those two methods are defined in AlgoliaEloquentTrait.
+When putting those methods in a parent class they will be "erased" by AlgoliaEloquentTrait if used in a child class
+(because of php inheritance)
+
 ## Custom Index Name
 
 By default, the index name will be the pluralized class name, e.g. "Contacts". You can customize the index name by using the `$indices` option:
