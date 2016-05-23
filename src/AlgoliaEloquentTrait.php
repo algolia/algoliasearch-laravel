@@ -15,14 +15,20 @@ trait AlgoliaEloquentTrait
      * Static calls.
      *
      * @param bool $safe
+     * @param bool $setSettings
      */
-    public function _reindex($safe = true)
+    public function _reindex($safe = true, $setSettings = true)
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
 
         $indices = $modelHelper->getIndices($this);
         $indicesTmp = $safe ? $modelHelper->getIndicesTmp($this) : $indices;
+
+        if ($setSettings === true) {
+            $setToTmpIndices = ($safe === true);
+            $this->_setSettings($setToTmpIndices);
+        }
 
         static::chunk(100, function ($models) use ($indicesTmp, $modelHelper) {
             /** @var \AlgoliaSearch\Index $index */
@@ -136,13 +142,19 @@ trait AlgoliaEloquentTrait
         return $result;
     }
 
-    public function _setSettings()
+    public function _setSettings($setToTmpIndices = false)
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
 
         $settings = $modelHelper->getSettings($this);
-        $indices = $modelHelper->getIndices($this);
+
+        if ($setToTmpIndices === false) {
+            $indices = $modelHelper->getIndices($this);
+        }
+        else {
+            $indices = $modelHelper->getIndicesTmp($this);
+        }
 
         $slaves_settings = $modelHelper->getSlavesSettings($this);
         $slaves = isset($settings['slaves']) ? $settings['slaves'] : [];
