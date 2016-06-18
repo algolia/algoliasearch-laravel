@@ -170,10 +170,10 @@ for ($i = 0; $i < 10000; $i++) {
 Contact::reindex(); // Will use batch operations.
 ```
 
-You can also make a dynamic condition for those two parameters creating an ``autoIndex``` and/or ```autoDelete method```
+You can also make a dynamic condition for those two parameters creating an `autoIndex` and/or `autoDelete method`
 on your model
 
-```
+```php
 use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
@@ -435,7 +435,7 @@ Book::search('foo bar', ['index' => 'contacts_private']);
 
 Doing :
 
-```
+```php
 Ad::where('id', $id)->update($attributes);
 ```
 
@@ -444,7 +444,7 @@ it is just a convenient way to generate the query hidden behind the model
 
 To make this query work with Algolia you need to do it like that:
 
-```
+```php
 Ad::find($id)->update($attributes);
 ```
 
