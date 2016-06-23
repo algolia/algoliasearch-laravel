@@ -2,6 +2,7 @@
 
 namespace AlgoliaSearch\Tests;
 
+use AlgoliaSearch\Tests\Models\Model11;
 use AlgoliaSearch\Tests\Models\Model2;
 use AlgoliaSearch\Tests\Models\Model4;
 use AlgoliaSearch\Tests\Models\Model6;
@@ -21,8 +22,8 @@ class AlgoliaEloquentTraitTest extends TestCase
 
     public function testGetAlgoliaRecordDefault()
     {
-        $this->assertEquals(['id2' => 1, 'objectID' => 1], (new Model2())->getAlgoliaRecordDefault());
-        $this->assertEquals(['id2' => 1, 'objectID' => 1, 'id3' => 1, 'name' => 'test'], (new Model4())->getAlgoliaRecordDefault());
+        $this->assertEquals(['id2' => 1, 'objectID' => 1], (new Model2())->getAlgoliaRecordDefault('test'));
+        $this->assertEquals(['id2' => 1, 'objectID' => 1, 'id3' => 1, 'name' => 'test'], (new Model4())->getAlgoliaRecordDefault('test'));
     }
 
     public function testPushToindex()
@@ -40,7 +41,7 @@ class AlgoliaEloquentTraitTest extends TestCase
 
         App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);
 
-        $index->shouldReceive('addObject')->times(2)->with((new Model4())->getAlgoliaRecordDefault());
+        $index->shouldReceive('addObject')->times(2)->with((new Model4())->getAlgoliaRecordDefault('test'));
 
         $this->assertEquals(null, (new Model4())->pushToIndex());
     }
@@ -117,6 +118,29 @@ class AlgoliaEloquentTraitTest extends TestCase
         $modelHelper->shouldReceive('getSlavesSettings')->andReturn($realModelHelper->getSlavesSettings($model10));
 
         $this->assertEquals(null, $model10->setSettings());
+    }
+
+    function testPustToIndexWithgetAlgoliaRecordAndIndexName() {
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $realModelHelper */
+        $realModelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
+
+        $modelHelper = Mockery::mock('\AlgoliaSearch\Laravel\ModelHelper');
+
+        $realindices = $realModelHelper->getIndices(new Model11());
+        $realindex = $realindices[0];
+        $index = Mockery::mock('\AlgoliaSearch\Index');
+        $index->indexName = $realindex->indexName;
+
+        $modelHelper->shouldReceive('getIndices')->andReturn([$index]);
+        $modelHelper->shouldReceive('getObjectId')->andReturn($realModelHelper->getObjectId(new Model11()));
+        $modelHelper->shouldReceive('indexOnly')->andReturn(true);
+
+        App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);
+
+
+        $index->shouldReceive('addObject')->times(1)->with(["is" => "working", "objectID" => null]);
+
+        $this->assertEquals(null, (new Model11())->pushToIndex());
     }
 
     public function tearDown()

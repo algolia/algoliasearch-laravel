@@ -37,7 +37,7 @@ trait AlgoliaEloquentTrait
 
                 foreach ($models as $model) {
                     if ($modelHelper->indexOnly($model, $index->indexName)) {
-                        $records[] = $model->getAlgoliaRecordDefault();
+                        $records[] = $model->getAlgoliaRecordDefault($index->indexName);
                     }
                 }
 
@@ -234,7 +234,7 @@ trait AlgoliaEloquentTrait
     /**
      * Methods.
      */
-    public function getAlgoliaRecordDefault()
+    public function getAlgoliaRecordDefault($indexName)
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
@@ -242,7 +242,7 @@ trait AlgoliaEloquentTrait
         $record = null;
 
         if (method_exists($this, static::$methodGetName)) {
-            $record = $this->{static::$methodGetName}();
+            $record = $this->{static::$methodGetName}($indexName);
         } else {
             $record = $this->toArray();
         }
@@ -264,7 +264,7 @@ trait AlgoliaEloquentTrait
         /** @var \AlgoliaSearch\Index $index */
         foreach ($indices as $index) {
             if ($modelHelper->indexOnly($this, $index->indexName)) {
-                $index->addObject($this->getAlgoliaRecordDefault());
+                $index->addObject($this->getAlgoliaRecordDefault($index->indexName));
             }
         }
     }
