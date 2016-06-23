@@ -113,6 +113,39 @@ You can propagate (save) the settings to algolia using the `setSetting` method:
 Contact::setSettings();
 ```
 
+#### Synonyms
+
+Synonyms are used to tell the engine about words or expressions that should be considered equal in regard to the textual relevance.
+
+Our [synonyms API](https://www.algolia.com/doc/relevance/synonyms) has been designed to manage as easily as possible a large set of synonyms for an index and its slaves.
+
+You can use the synonyms API by adding a `synonyms` in `$algoliaSettings` class property like this:
+
+```php
+use Illuminate\Database\Eloquent\Model;
+
+class Contact extends Model
+{
+    use AlgoliaEloquentTrait;
+
+    public $algoliaSettings = [
+        'synonyms' => [
+            [
+                'objectID' => 'red-color',
+                'type'     => 'synonym',
+                'synonyms' => ['red', 'another red', 'yet another red']
+            ]
+        ]
+    ];
+}
+```
+
+You can propagate (save) the settings to algolia using the `setSetting` method:
+
+```php
+Contact::setSettings();
+```
+
 ## Frontend Search (realtime experience)
 
 Traditional search implementations tend to have search logic and functionality on the backend. This made sense when the search experience consisted of a user entering a search query, executing that search, and then being redirected to a search result page.
