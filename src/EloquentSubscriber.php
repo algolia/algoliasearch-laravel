@@ -20,7 +20,7 @@ class EloquentSubscriber
         /** @var \AlgoliaSearch\Index $index */
         foreach ($this->modelHelper->getIndices($model) as $index) {
             if ($this->modelHelper->indexOnly($model, $index->indexName)) {
-                $index->addObject($this->modelHelper->getAlgoliaRecord($model), $this->modelHelper->getObjectId($model));
+                $index->addObject($this->modelHelper->getAlgoliaRecord($model, $index->indexName), $this->modelHelper->getObjectId($model));
             }
         }
 
