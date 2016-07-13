@@ -25,7 +25,7 @@ This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. 
 
 <!--/NO_HTML-->
 
-# Install
+## Install
 
 Add `algolia/algoliasearch-laravel` to your `composer.json` file:
 
@@ -39,7 +39,7 @@ Add the service provider to `config/app.php` in the `providers` array.
 AlgoliaSearch\Laravel\AlgoliaServiceProvider::class
 ```
 
-# Configuration
+## Configuration
 
 Laravel Algolia requires a connection configuration. To get started, you'll need to publish all vendor assets:
 
@@ -51,7 +51,7 @@ You can add the ```--provider="Vinkla\Algolia\AlgoliaServiceProvider"``` option 
 
 This will create a `config/algolia.php` file in your app that you can modify to set your configuration. Also, make sure you check for changes compared to the original config file after an upgrade.
 
-# Quick Start
+## Quick Start
 
 The following code adds search capabilities to your `Contact` model creating a `Contact` index:
 
@@ -73,7 +73,7 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use AlgoliaEloquentTrait;
-    
+
     public function getAlgoliaRecord()
     {
         return array_merge($this->toArray(), [
@@ -83,7 +83,7 @@ class Contact extends Model
 }
 ```
 
-## Ranking & Relevance
+### Ranking & Relevance
 
 We provide many ways to configure your index settings to tune the overall relevancy but the most important ones are the **searchable attributes** and the attributes reflecting the **record popularity**. You can configure them with the following code:
 
@@ -93,14 +93,14 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use AlgoliaEloquentTrait;
-    
+
     public $algoliaSettings = [
     	'attributesToIndex' => [
-    		'id', 
+    		'id',
     		'name',
     	],
     	'customRanking' => [
-    		'desc(popularity)', 
+    		'desc(popularity)',
     		'asc(name)',
     	],
     ];
@@ -113,7 +113,7 @@ You can propagate (save) the settings to algolia using the `setSetting` method:
 Contact::setSettings();
 ```
 
-#### Synonyms
+##### Synonyms
 
 Synonyms are used to tell the engine about words or expressions that should be considered equal in regard to the textual relevance.
 
@@ -146,7 +146,7 @@ You can propagate (save) the settings to algolia using the `setSetting` method:
 Contact::setSettings();
 ```
 
-## Frontend Search (realtime experience)
+### Frontend Search (realtime experience)
 
 Traditional search implementations tend to have search logic and functionality on the backend. This made sense when the search experience consisted of a user entering a search query, executing that search, and then being redirected to a search result page.
 
@@ -162,7 +162,7 @@ index.search('something', function(success, hits) {
 }, { hitsPerPage: 10, page: 0 });
 ```
 
-## Backend Search
+### Backend Search
 
 You could also use the `search` method but it's not recommended to implement instant/realtime search experience:
 
@@ -170,26 +170,26 @@ You could also use the `search` method but it's not recommended to implement ins
 Contact::search('jon doe');
 ```
 
-# Options
+## Options
 
-## Auto-indexing & Asynchronism
+### Auto-indexing & Asynchronism
 
 Each time a record is saved; it will be - asynchronously - indexed. On the other hand, each time a record is destroyed, it will be - asynchronously - removed from the index.
 
 You can disable the auto-indexing and auto-removing setting the following options:
-   
+
 ```php
 use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
 	use AlgoliaEloquentTrait;
-    
+
 	public static $autoIndex = false;
 	public static $autoDelete = false;
 }
 ```
- 
+
 You can temporary disable auto-indexing. This is often used for performance reason.
 
 ```php
@@ -237,7 +237,7 @@ Be careful those two methods are defined in AlgoliaEloquentTrait.
 When putting those methods in a parent class they will be "erased" by AlgoliaEloquentTrait if used in a child class
 (because of php inheritance)
 
-## Custom Index Name
+### Custom Index Name
 
 By default, the index name will be the pluralized class name, e.g. "Contacts". You can customize the index name by using the `$indices` option:
 
@@ -247,12 +247,12 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use AlgoliaEloquentTrait;
-    
+
     public $indices = ['contact_all'];
 }
 ```
 
-## Per-environment Indexes
+### Per-environment Indexes
 
 You can suffix the index name with the current App environment using the following option:
 
@@ -262,12 +262,12 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use AlgoliaEloquentTrait;
-    
+
     public static $perEnvironment = true; // Index name will be 'Contacts_{\App::environnement()}';
 }
 ```
 
-## Custom `objectID`
+### Custom `objectID`
 
 By default, the `objectID` is based on your record's `keyName` (`id` by default). You can change this behavior specifying the `objectIdKey` option (be sure to use a uniq field).
 
@@ -277,12 +277,12 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use AlgoliaEloquentTrait;
-    
+
 	public static $objectIdKey = 'new_key';
 }
 ```
 
-## Restrict Indexing to a Subset of Your Data
+### Restrict Indexing to a Subset of Your Data
 
 You can add constraints controlling if a record must be indexed by defining the `indexOnly()` method.
 
@@ -292,7 +292,7 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
    	use AlgoliaEloquentTrait;
-    
+
 	public function indexOnly($index_name)
 	{
 		return (bool) $condition;
@@ -300,7 +300,7 @@ class Contact extends Model
 }
 ```
 
-# Relationships
+## Relationships
 
 By default the Algolia package will fetch the **loaded** relationships.
 
@@ -315,8 +315,8 @@ public function getAlgoliaRecord()
 	 * Load the categories relation so that it's available
 	 * 	in the laravel toArray method
 	 */
-	$this->categories; 
-  
+	$this->categories;
+
    return $this->toArray();
 }
 ```
@@ -334,16 +334,16 @@ public function getAlgoliaRecord()
 	$extra_data['categories'] = array_map(function ($data) {
 							            return $data['name'];
 						        }, $this->categories->toArray();
-  
+
    return array_merge($this->toArray(), $extra_data);
 }
 ```
 
 
 
-# Indexing
+## Indexing
 
-## Manual Indexing
+### Manual Indexing
 
 You can trigger indexing using the `pushToIndex` instance method.
 
@@ -352,7 +352,7 @@ $contact = Contact::firstOrCreate(['name' => 'Jean']);
 $contact->pushToIndex();
 ```
 
-## Manual Removal
+### Manual Removal
 
 And trigger the removing using the `removeFromIndex` instance method.
 
@@ -361,7 +361,7 @@ $contact = Contact::firstOrCreate(['name' => 'Jean']);
 $contact->removeFromIndex();
 ```
 
-## Reindexing
+### Reindexing
 
 To *safely* reindex all your records (index to a temporary index + move the temporary index to the current one atomically), use the `reindex` class method:
 
@@ -375,7 +375,7 @@ To reindex all your records (in place, without deleting out-dated records):
 Contact::reindex(false);
 ```
 
-## Clearing an Index
+### Clearing an Index
 
 To clear an index, use the `clearIndices` class method:
 
@@ -383,7 +383,7 @@ To clear an index, use the `clearIndices` class method:
 Contact::clearIndices();
 ```
 
-# Master/Slave
+## Master/Slave
 
 You can define slave indexes using the `$algolia_settings` variable:
 
@@ -393,14 +393,14 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
 	 use AlgoliaEloquentTrait;
-    
+
 	 public $algoliaSettings = [
 		'attributesToIndex' => [
-			'id', 
+			'id',
 			'name',
 		],
     	'customRanking' => [
-    		'desc(popularity)', 
+    		'desc(popularity)',
     		'asc(name)',
     	],
     	'slaves' => [
@@ -431,7 +431,7 @@ To search using a slave use the following code:
 Book::search('foo bar', ['index' => 'contacts_desc']);
 ```
 
-# Target Multiple Indexes
+## Target Multiple Indexes
 
 You can index a record in several indexes using the <code>$indices</code> property:
 
@@ -441,12 +441,12 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
 	use AlgoliaEloquentTrait;
-    
+
 	public $indices = [
-		'contact_public', 
+		'contact_public',
 		'contact_private',
 	];
-    
+
 	public function indexOnly($indexName)
 	{
 		if ($indexName == 'contact_public')
@@ -464,7 +464,7 @@ To search using an extra index, use the following code:
 Book::search('foo bar', ['index' => 'contacts_private']);
 ```
 
-# Eloquent compatibility
+## Eloquent compatibility
 
 Doing :
 
@@ -482,11 +482,11 @@ Ad::find($id)->update($attributes);
 ```
 
 <!--NO_HTML-->
-# Compatibility
+## Compatibility
 
 Compatible with 5.x applications
 
-## License
+### License
 
 Laravel Algolia Search is licensed under [The MIT License (MIT)](LICENSE).
 
