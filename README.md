@@ -27,12 +27,14 @@ This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. 
 
 ## Install
 
+### Install via composer
 Add `algolia/algoliasearch-laravel` to your `composer.json` file:
 
 ```bash
 composer require algolia/algoliasearch-laravel
 ```
 
+### Service provider
 Add the service provider to `config/app.php` in the `providers` array.
 
 ```php
@@ -40,6 +42,8 @@ AlgoliaSearch\Laravel\AlgoliaServiceProvider::class
 ```
 
 ## Configuration
+
+### Publish vendor
 
 Laravel Algolia requires a connection configuration. To get started, you'll need to publish all vendor assets:
 
@@ -52,6 +56,8 @@ You can add the ```--provider="Vinkla\Algolia\AlgoliaServiceProvider"``` option 
 This will create a `config/algolia.php` file in your app that you can modify to set your configuration. Also, make sure you check for changes compared to the original config file after an upgrade.
 
 ## Quick Start
+
+### Quick Start
 
 The following code adds search capabilities to your `Contact` model creating a `Contact` index:
 
@@ -95,14 +101,14 @@ class Contact extends Model
     use AlgoliaEloquentTrait;
 
     public $algoliaSettings = [
-    	'attributesToIndex' => [
-    		'id',
-    		'name',
-    	],
-    	'customRanking' => [
-    		'desc(popularity)',
-    		'asc(name)',
-    	],
+        'attributesToIndex' => [
+            'id',
+            'name',
+        ],
+        'customRanking' => [
+            'desc(popularity)',
+            'asc(name)',
+        ],
     ];
 }
 ```
@@ -183,10 +189,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-	use AlgoliaEloquentTrait;
+    use AlgoliaEloquentTrait;
 
-	public static $autoIndex = false;
-	public static $autoDelete = false;
+    public static $autoIndex = false;
+    public static $autoDelete = false;
 }
 ```
 
@@ -197,7 +203,7 @@ Contact::$autoIndex = false;
 Contact::clearIndices();
 
 for ($i = 0; $i < 10000; $i++) {
-	$contact = Contact::firstOrCreate(['name' => 'Jean']);
+    $contact = Contact::firstOrCreate(['name' => 'Jean']);
 }
 
 Contact::reindex(); // Will use batch operations.
@@ -211,25 +217,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-	use AlgoliaEloquentTrait;
+    use AlgoliaEloquentTrait;
 
-	public function autoIndex()
-	{
-	    if (\App::environment() === 'test') {
-	        return false;
-	    }
-
-	    return true;
-	}
-
-	public static autoDelete()
-	{
+    public function autoIndex()
+    {
         if (\App::environment() === 'test') {
             return false;
         }
 
         return true;
-	}
+    }
+
+    public static autoDelete()
+    {
+        if (\App::environment() === 'test') {
+            return false;
+        }
+
+        return true;
+    }
 }
 ```
 
@@ -278,7 +284,7 @@ class Contact extends Model
 {
     use AlgoliaEloquentTrait;
 
-	public static $objectIdKey = 'new_key';
+    public static $objectIdKey = 'new_key';
 }
 ```
 
@@ -291,16 +297,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-   	use AlgoliaEloquentTrait;
+    use AlgoliaEloquentTrait;
 
-	public function indexOnly($index_name)
-	{
-		return (bool) $condition;
-	}
+    public function indexOnly($index_name)
+    {
+        return (bool) $condition;
+    }
 }
 ```
 
 ## Relationships
+
+### Relationships
 
 By default the Algolia package will fetch the **loaded** relationships.
 
@@ -311,11 +319,11 @@ It will look like:
 ```php
 public function getAlgoliaRecord()
 {
-	/**
-	 * Load the categories relation so that it's available
-	 * 	in the laravel toArray method
-	 */
-	$this->categories;
+    /**
+     * Load the categories relation so that it's available
+     *  in the laravel toArray method
+     */
+    $this->categories;
 
    return $this->toArray();
 }
@@ -326,14 +334,14 @@ In the resulted object you will have categories converted to array by Laravel. I
 ```php
 public function getAlgoliaRecord()
 {
-	/**
-	 * Load the categories relation so that it's available
-	 * 	in the laravel toArray method
-	 */
-	$extra_data = [];
-	$extra_data['categories'] = array_map(function ($data) {
-							            return $data['name'];
-						        }, $this->categories->toArray();
+    /**
+     * Load the categories relation so that it's available
+     *  in the laravel toArray method
+     */
+    $extra_data = [];
+    $extra_data['categories'] = array_map(function ($data) {
+                                        return $data['name'];
+                                }, $this->categories->toArray();
 
    return array_merge($this->toArray(), $extra_data);
 }
@@ -385,6 +393,8 @@ Contact::clearIndices();
 
 ## Master/Slave
 
+### Master/Slave
+
 You can define slave indexes using the `$algolia_settings` variable:
 
 ```php
@@ -392,20 +402,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-	 use AlgoliaEloquentTrait;
+     use AlgoliaEloquentTrait;
 
-	 public $algoliaSettings = [
-		'attributesToIndex' => [
-			'id',
-			'name',
-		],
-    	'customRanking' => [
-    		'desc(popularity)',
-    		'asc(name)',
-    	],
-    	'slaves' => [
-    		'contacts_desc',
-    	],
+     public $algoliaSettings = [
+        'attributesToIndex' => [
+            'id',
+            'name',
+        ],
+        'customRanking' => [
+            'desc(popularity)',
+            'asc(name)',
+        ],
+        'slaves' => [
+            'contacts_desc',
+        ],
     ];
 
     public $slavesSettings = [
@@ -433,6 +443,8 @@ Book::search('foo bar', ['index' => 'contacts_desc']);
 
 ## Target Multiple Indexes
 
+### Target Multiple Indexes
+
 You can index a record in several indexes using the <code>$indices</code> property:
 
 ```php
@@ -440,20 +452,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-	use AlgoliaEloquentTrait;
+    use AlgoliaEloquentTrait;
 
-	public $indices = [
-		'contact_public',
-		'contact_private',
-	];
+    public $indices = [
+        'contact_public',
+        'contact_private',
+    ];
 
-	public function indexOnly($indexName)
-	{
-		if ($indexName == 'contact_public')
-			return true;
+    public function indexOnly($indexName)
+    {
+        if ($indexName == 'contact_public')
+            return true;
 
-		return $this->private;
-	}
+        return $this->private;
+    }
 
 }
 ```
@@ -465,6 +477,8 @@ Book::search('foo bar', ['index' => 'contacts_private']);
 ```
 
 ## Eloquent compatibility
+
+### Eloquent compatibility
 
 Doing :
 
@@ -484,8 +498,11 @@ Ad::find($id)->update($attributes);
 <!--NO_HTML-->
 ## Compatibility
 
+### Compatibility
+
 Compatible with 5.x applications
 
+## License
 ### License
 
 Laravel Algolia Search is licensed under [The MIT License (MIT)](LICENSE).
