@@ -391,7 +391,7 @@ To clear an index, use the `clearIndices` class method:
 Contact::clearIndices();
 ```
 
-## Master/Slave
+## Manage indices
 
 ### Master/Slave
 
@@ -440,8 +440,6 @@ To search using a slave use the following code:
 ```php
 Book::search('foo bar', ['index' => 'contacts_desc']);
 ```
-
-## Target Multiple Indexes
 
 ### Target Multiple Indexes
 
