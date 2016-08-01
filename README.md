@@ -341,7 +341,7 @@ public function getAlgoliaRecord()
     $extra_data = [];
     $extra_data['categories'] = array_map(function ($data) {
                                         return $data['name'];
-                                }, $this->categories->toArray();
+                                }, $this->categories->toArray());
 
    return array_merge($this->toArray(), $extra_data);
 }
