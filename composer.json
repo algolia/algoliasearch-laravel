@@ -9,8 +9,8 @@
         "api"
     ],
     "require": {
-    	"php": ">=5.5.9",
-        "vinkla/algolia": "~2.0"
+    	"php": ">=5.3.29",
+        "algolia/algoliasearch-client-php": "^1.6"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
