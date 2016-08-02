@@ -241,8 +241,8 @@ trait AlgoliaEloquentTrait
 
         $record = null;
 
-        if (method_exists($this, static::$methodGetName)) {
-            $record = $this->{static::$methodGetName}($indexName);
+        if (method_exists($this, self::$methodGetName)) {
+            $record = $this->{self::$methodGetName}($indexName);
         } else {
             $record = $this->toArray();
         }
