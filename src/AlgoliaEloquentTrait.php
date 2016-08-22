@@ -175,7 +175,10 @@ trait AlgoliaEloquentTrait
             }
 
             if (count(array_keys($settings)) > 0) {
-                $index->setSettings($settings);
+                $settingsWithoutSynonyms = $settings;
+                unset($settingsWithoutSynonyms['synonyms']);
+
+                $index->setSettings($settingsWithoutSynonyms);
             }
 
             if ($b && isset($settings['slaves'])) {
@@ -189,6 +192,7 @@ trait AlgoliaEloquentTrait
                 $index = $modelHelper->getIndices($this, $slave)[0];
 
                 $s = array_merge($settings, $slaves_settings[$slave]);
+                unset($s['synonyms']);
 
                 if (count(array_keys($s)) > 0)
                     $index->setSettings($s);
