@@ -173,9 +173,18 @@ trait AlgoliaEloquentTrait
             if (isset($settings['synonyms'])) {
                 $index->batchSynonyms($settings['synonyms'], true, true);
             }
+            else {
+                // If no synonyms are passed, clear all synonyms from index
+                $index->clearSynonyms(true);
+            }
 
             if (count(array_keys($settings)) > 0) {
-                $index->setSettings($settings);
+                // Synonyms cannot be pushed into "setSettings", it's got rejected from API and throwing exception
+                // Synonyms cannot be removed directly from $settings var, because then synonym would not be set to other indices
+                $settingsWithoutSynonyms = $settings;
+                unset($settingsWithoutSynonyms['synonyms']);
+
+                $index->setSettings($settingsWithoutSynonyms);
             }
 
             if ($b && isset($settings['slaves'])) {
@@ -189,6 +198,7 @@ trait AlgoliaEloquentTrait
                 $index = $modelHelper->getIndices($this, $slave)[0];
 
                 $s = array_merge($settings, $slaves_settings[$slave]);
+                unset($s['synonyms']);
 
                 if (count(array_keys($s)) > 0)
                     $index->setSettings($s);

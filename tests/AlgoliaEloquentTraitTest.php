@@ -70,6 +70,7 @@ class AlgoliaEloquentTraitTest extends TestCase
         $index = Mockery::mock('\AlgoliaSearch\Index');
         $index->shouldReceive('setSettings')->with(['slaves' => ['model_6_desc_testing']]);
         $index->shouldReceive('setSettings')->with(['ranking' => ['desc(name)']]);
+        $index->shouldReceive('clearSynonyms');
 
         /** @var \AlgoliaSearch\Laravel\ModelHelper $realModelHelper */
         $realModelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
