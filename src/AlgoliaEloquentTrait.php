@@ -149,27 +149,31 @@ trait AlgoliaEloquentTrait
 
         $settings = $modelHelper->getSettings($this);
 
-        if ($setToTmpIndices === false) {
-            $indices = $modelHelper->getIndices($this);
-        }
-        else {
+
+        $productionIndices = $indices = $modelHelper->getIndices($this);
+
+        if ($setToTmpIndices === true) {
             $indices = $modelHelper->getIndicesTmp($this);
         }
 
         $slaves_settings = $modelHelper->getSlavesSettings($this);
         $slaves = isset($settings['slaves']) ? $settings['slaves'] : [];
 
-        $b = true;
+        if (isset($settings['slaves'])) {
+            /** @var \AlgoliaSearch\Index $productionIndex */
+            foreach ($productionIndices as $productionIndex) {
+                $slaves = array_map(function ($indexName) use ($modelHelper) {
+                    return $modelHelper->getFinalIndexName($this, $indexName);
+                }, $settings['slaves']);
+
+                $productionIndex->setSettings(array('slaves' => $slaves));
+            }
+
+            unset($settings['slaves']);
+        }
 
         /** @var \AlgoliaSearch\Index $index */
         foreach ($indices as $index) {
-
-            if ($b && isset($settings['slaves'])) {
-                $settings['slaves'] = array_map(function ($indexName) use ($modelHelper) {
-                    return $modelHelper->getFinalIndexName($this, $indexName);
-                }, $settings['slaves']);
-            }
-
             if (isset($settings['synonyms'])) {
                 $index->batchSynonyms($settings['synonyms'], true, true);
             }
@@ -185,11 +189,6 @@ trait AlgoliaEloquentTrait
                 unset($settingsWithoutSynonyms['synonyms']);
 
                 $index->setSettings($settingsWithoutSynonyms);
-            }
-
-            if ($b && isset($settings['slaves'])) {
-                $b = false;
-                unset($settings['slaves']);
             }
         }
 
