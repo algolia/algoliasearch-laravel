@@ -170,7 +170,7 @@ index.search('something', function(success, hits) {
 
 ### Backend Search
 
-You could also use the `search` method but it's not recommended to implement instant/realtime search experience:
+You could also use the `search` method but it's not recommended to implement a instant/realtime search experience from the backend (having a frontend search gives a better user experience):
 
 ```php
 Contact::search('jon doe');
