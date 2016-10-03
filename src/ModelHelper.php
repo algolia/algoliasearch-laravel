@@ -80,9 +80,23 @@ class ModelHelper
         return property_exists($model, 'algoliaSettings') ? $model->algoliaSettings : [];
     }
 
+    public function getReplicasSettings(Model $model)
+    {
+        $replicas_settings = property_exists($model, 'replicasSettings') ? $model->replicasSettings : [];
+
+        // Backward compatibility
+        if ($replicas_settings === [] && property_exists($model, 'slavesSettings')) {
+            $replicas_settings = $model->slavesSettings;
+        }
+
+        return $replicas_settings;
+    }
+
     public function getSlavesSettings(Model $model)
     {
-        return property_exists($model, 'slavesSettings') ? $model->slavesSettings : [];
+        trigger_error("getSlavesSettings was renamed to getReplicasSettings", E_USER_DEPRECATED);
+
+        return $this->getReplicasSettings($model);
     }
 
     public function getFinalIndexName(Model $model, $indexName)

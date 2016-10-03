@@ -156,15 +156,25 @@ trait AlgoliaEloquentTrait
             $indices = $modelHelper->getIndicesTmp($this);
         }
 
-        $slaves_settings = $modelHelper->getSlavesSettings($this);
-        $slaves = isset($settings['slaves']) ? $settings['slaves'] : [];
+        $replicas_settings = $modelHelper->getReplicasSettings($this);
+        $replicas = isset($settings['replicas']) ? $settings['replicas'] : [];
+
+        // Backward compatibility
+        if ($replicas === [] && isset($settings['slaves'])) {
+            $replicas = $settings['slaves'];
+        }
 
         $b = true;
 
         /** @var \AlgoliaSearch\Index $index */
         foreach ($indices as $index) {
 
-            if ($b && isset($settings['slaves'])) {
+            if ($b && isset($settings['replicas'])) {
+                $settings['replicas'] = array_map(function ($indexName) use ($modelHelper) {
+                    return $modelHelper->getFinalIndexName($this, $indexName);
+                }, $settings['replicas']);
+            } elseif ($b && isset($settings['slaves'])) {
+                // Backward compatibility
                 $settings['slaves'] = array_map(function ($indexName) use ($modelHelper) {
                     return $modelHelper->getFinalIndexName($this, $indexName);
                 }, $settings['slaves']);
@@ -187,17 +197,21 @@ trait AlgoliaEloquentTrait
                 $index->setSettings($settingsWithoutSynonyms);
             }
 
-            if ($b && isset($settings['slaves'])) {
+            if ($b && isset($settings['replicas'])) {
+                $b = false;
+                unset($settings['replicas']);
+            } else if ($b && isset($settings['slaves'])) {
+                // Backward compatibility
                 $b = false;
                 unset($settings['slaves']);
             }
         }
 
-        foreach ($slaves as $slave) {
-            if (isset($slaves_settings[$slave])) {
-                $index = $modelHelper->getIndices($this, $slave)[0];
+        foreach ($replicas as $replica) {
+            if (isset($replicas_settings[$replica])) {
+                $index = $modelHelper->getIndices($this, $replica)[0];
 
-                $s = array_merge($settings, $slaves_settings[$slave]);
+                $s = array_merge($settings, $replicas_settings[$replica]);
                 unset($s['synonyms']);
 
                 if (count(array_keys($s)) > 0)

@@ -3,6 +3,7 @@
 namespace AlgoliaSearch\Tests;
 
 use AlgoliaSearch\Tests\Models\Model11;
+use AlgoliaSearch\Tests\Models\Model12;
 use AlgoliaSearch\Tests\Models\Model2;
 use AlgoliaSearch\Tests\Models\Model4;
 use AlgoliaSearch\Tests\Models\Model6;
@@ -68,7 +69,7 @@ class AlgoliaEloquentTraitTest extends TestCase
     public function testSetSettings()
     {
         $index = Mockery::mock('\AlgoliaSearch\Index');
-        $index->shouldReceive('setSettings')->with(['slaves' => ['model_6_desc_testing']]);
+        $index->shouldReceive('setSettings')->with(['replicas' => ['model_6_desc_testing']]);
         $index->shouldReceive('setSettings')->with(['ranking' => ['desc(name)']]);
         $index->shouldReceive('clearSynonyms');
 
@@ -82,11 +83,21 @@ class AlgoliaEloquentTraitTest extends TestCase
         $modelHelper->shouldReceive('getSettings')->andReturn($realModelHelper->getSettings($model6));
         $modelHelper->shouldReceive('getIndices')->andReturn([$index]);
         $modelHelper->shouldReceive('getFinalIndexName')->andReturn($realModelHelper->getFinalIndexName($model6, 'model_6_desc'));
-        $modelHelper->shouldReceive('getSlavesSettings')->andReturn($realModelHelper->getSlavesSettings($model6));
+        $modelHelper->shouldReceive('getReplicasSettings')->andReturn($realModelHelper->getReplicasSettings($model6));
 
-        $this->assertEquals($modelHelper->getFinalIndexName($model6, $realModelHelper->getSettings($model6)['slaves'][0]), 'model_6_desc_testing');
+        $this->assertEquals($modelHelper->getFinalIndexName($model6, $realModelHelper->getSettings($model6)['replicas'][0]), 'model_6_desc_testing');
 
         $model6->setSettings();
+
+        $model12 = new Model12();
+        $modelHelper->shouldReceive('getSettings')->andReturn($realModelHelper->getSettings($model12));
+        $modelHelper->shouldReceive('getIndices')->andReturn([$index]);
+        $modelHelper->shouldReceive('getFinalIndexName')->andReturn($realModelHelper->getFinalIndexName($model12, 'model_6_desc'));
+        $modelHelper->shouldReceive('getReplicasSettings')->andReturn($realModelHelper->getReplicasSettings($model12));
+
+        $this->assertEquals($modelHelper->getFinalIndexName($model12, $realModelHelper->getSettings($model12)['slaves'][0]), 'model_6_desc_testing');
+
+        $model12->setSettings();
     }
 
     public function testSetSynonyms()
@@ -116,7 +127,7 @@ class AlgoliaEloquentTraitTest extends TestCase
         $model10 = new Model10();
         $modelHelper->shouldReceive('getSettings')->andReturn($realModelHelper->getSettings($model10));
         $modelHelper->shouldReceive('getIndices')->andReturn([$index]);
-        $modelHelper->shouldReceive('getSlavesSettings')->andReturn($realModelHelper->getSlavesSettings($model10));
+        $modelHelper->shouldReceive('getReplicasSettings')->andReturn($realModelHelper->getReplicasSettings($model10));
 
         $this->assertEquals(null, $model10->setSettings());
     }
