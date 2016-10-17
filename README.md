@@ -20,7 +20,7 @@ This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. 
 4. [Ranking & Relevance](#ranking--relevance)
 5. [Options](#options)
 6. [Indexing](#indexing)
-7. [Master/Slave](#masterslave)
+7. [Primary/Replica](#primaryreplica)
 8. [Target multiple indexes](#target-multiple-indexes)
 
 <!--/NO_HTML-->
@@ -123,7 +123,7 @@ Contact::setSettings();
 
 Synonyms are used to tell the engine about words or expressions that should be considered equal in regard to the textual relevance.
 
-Our [synonyms API](https://www.algolia.com/doc/relevance/synonyms) has been designed to manage as easily as possible a large set of synonyms for an index and its slaves.
+Our [synonyms API](https://www.algolia.com/doc/relevance/synonyms) has been designed to manage as easily as possible a large set of synonyms for an index and its replicas.
 
 You can use the synonyms API by adding a `synonyms` in `$algoliaSettings` class property like this:
 
@@ -393,9 +393,9 @@ Contact::clearIndices();
 
 ## Manage indices
 
-### Master/Slave
+### Primary/Replica
 
-You can define slave indexes using the `$algolia_settings` variable:
+You can define replica indexes using the `$algolia_settings` variable:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -413,12 +413,12 @@ class Contact extends Model
             'desc(popularity)',
             'asc(name)',
         ],
-        'slaves' => [
+        'replicas' => [
             'contacts_desc',
         ],
     ];
 
-    public $slavesSettings = [
+    public $replicasSettings = [
         'contacts_desc' => [
             'ranking' => [
                 'desc(name)',
@@ -435,7 +435,7 @@ class Contact extends Model
 }
 ```
 
-To search using a slave use the following code:
+To search using a replica use the following code:
 
 ```php
 Book::search('foo bar', ['index' => 'contacts_desc']);
