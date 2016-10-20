@@ -207,6 +207,7 @@ for ($i = 0; $i < 10000; $i++) {
 }
 
 Contact::reindex(); // Will use batch operations.
+Contact::$autoIndex = true;
 ```
 
 You can also make a dynamic condition for those two parameters creating an `autoIndex` and/or `autoDelete method`
