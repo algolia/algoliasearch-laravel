@@ -45,6 +45,19 @@ class ModelHelper
         return (isset($traits['AlgoliaSearch\Laravel\AlgoliaEloquentTrait']));
     }
 
+    public function wouldBeIndexed(Model $model, $index_name)
+    {
+        if (! method_exists($model, 'indexOnly')) {
+            return false;
+        }
+
+        $cloned = clone $model;
+
+        $cloned->setRawAttributes($cloned->getOriginal());
+
+        return $cloned->indexOnly($index_name) === true;
+    }
+
     public function isAutoIndex(Model $model)
     {
         return ($this->hasAlgoliaTrait($model) && $model->autoIndex());
