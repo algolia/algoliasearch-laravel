@@ -33,19 +33,24 @@ trait AlgoliaEloquentTrait
         static::chunk(100, function ($models) use ($indicesTmp, $modelHelper, $onInsert) {
             /** @var \AlgoliaSearch\Index $index */
             foreach ($indicesTmp as $index) {
-                $records = [];
+                $records         = [];
+                $recordsAsEntity = [];
 
                 foreach ($models as $model) {
                     if ($modelHelper->indexOnly($model, $index->indexName)) {
                         $records[] = $model->getAlgoliaRecordDefault($index->indexName);
 
                         if ($onInsert && is_callable($onInsert)) {
-                            call_user_func_array($onInsert, [$model]);
+                            $recordsAsEntity[] = $model;
                         }
                     }
                 }
 
                 $index->addObjects($records);
+
+                if ($onInsert && is_callable($onInsert)) {
+                    call_user_func_array($onInsert, [$recordsAsEntity]);
+                }
             }
 
         });
