@@ -17,7 +17,7 @@ trait AlgoliaEloquentTrait
      * @param bool $safe
      * @param bool $setSettings
      */
-    public function _reindex($safe = true, $setSettings = true)
+    public function _reindex($safe = true, $setSettings = true, \Closure $onInsert = null)
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
@@ -30,7 +30,7 @@ trait AlgoliaEloquentTrait
             $this->_setSettings($setToTmpIndices);
         }
 
-        static::chunk(100, function ($models) use ($indicesTmp, $modelHelper) {
+        static::chunk(100, function ($models) use ($indicesTmp, $modelHelper, $onInsert) {
             /** @var \AlgoliaSearch\Index $index */
             foreach ($indicesTmp as $index) {
                 $records = [];
@@ -38,6 +38,10 @@ trait AlgoliaEloquentTrait
                 foreach ($models as $model) {
                     if ($modelHelper->indexOnly($model, $index->indexName)) {
                         $records[] = $model->getAlgoliaRecordDefault($index->indexName);
+
+                        if ($onInsert && is_callable($onInsert)) {
+                            call_user_func_array($onInsert, [$model]);
+                        }
                     }
                 }
 
