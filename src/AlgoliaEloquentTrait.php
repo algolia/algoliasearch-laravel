@@ -16,8 +16,9 @@ trait AlgoliaEloquentTrait
      *
      * @param bool $safe
      * @param bool $setSettings
+     * @param bool $mergeOldSettings
      */
-    public function _reindex($safe = true, $setSettings = true)
+    public function _reindex($safe = true, $setSettings = true, $mergeOldSettings = false)
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
@@ -27,7 +28,7 @@ trait AlgoliaEloquentTrait
 
         if ($setSettings === true) {
             $setToTmpIndices = ($safe === true);
-            $this->_setSettings($setToTmpIndices);
+            $this->_setSettings($setToTmpIndices, $mergeOldSettings);
         }
 
         static::chunk(100, function ($models) use ($indicesTmp, $modelHelper) {
@@ -142,7 +143,7 @@ trait AlgoliaEloquentTrait
         return $result;
     }
 
-    public function _setSettings($setToTmpIndices = false)
+    public function _setSettings($setToTmpIndices = false, $mergeOldSettings = false)
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
         $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
@@ -167,7 +168,29 @@ trait AlgoliaEloquentTrait
         $b = true;
 
         /** @var \AlgoliaSearch\Index $index */
-        foreach ($indices as $index) {
+        foreach ($indices as $key => $index) {
+            if ($mergeOldSettings) {
+                $old_indices = $modelHelper->getIndices($this);
+                $old_index = $old_indices[$key];
+
+                try {
+                    $oldSettings = $old_index->getSettings();
+                }
+                catch (\Exception $e) {
+                    $oldSettings = [];
+                }
+
+                unset($oldSettings['replicas']);
+                unset($oldSettings['slaves']);
+
+                $newSettings = $oldSettings;
+
+                foreach ($settings as $settingName => $settingValue) {
+                    $newSettings[$settingName] = $settingValue;
+                }
+
+                $settings = $newSettings;
+            }
 
             if ($b && isset($settings['replicas'])) {
                 $settings['replicas'] = array_map(function ($indexName) use ($modelHelper) {
