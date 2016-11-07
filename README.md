@@ -384,6 +384,19 @@ To reindex all your records (in place, without deleting out-dated records):
 Contact::reindex(false);
 ```
 
+To set settings during the reindexing process:
+
+```php
+Contact::reindex(true, true);
+```
+
+To keep settings that you set on the Algolia dashboard when reindexing and setting settings:
+
+```php
+Contact::reindex(true, true, true);
+```
+
+
 ### Clearing an Index
 
 To clear an index, use the `clearIndices` class method:
