@@ -4,6 +4,7 @@ namespace AlgoliaSearch\Tests;
 
 use AlgoliaSearch\Tests\Models\Model11;
 use AlgoliaSearch\Tests\Models\Model12;
+use AlgoliaSearch\Tests\Models\Model13;
 use AlgoliaSearch\Tests\Models\Model2;
 use AlgoliaSearch\Tests\Models\Model4;
 use AlgoliaSearch\Tests\Models\Model6;
@@ -98,6 +99,48 @@ class AlgoliaEloquentTraitTest extends TestCase
         $this->assertEquals($modelHelper->getFinalIndexName($model12, $realModelHelper->getSettings($model12)['slaves'][0]), 'model_6_desc_testing');
 
         $model12->setSettings();
+
+
+    }
+
+    public function testSetSettingsMerge()
+    {
+        $index = Mockery::mock('\AlgoliaSearch\Index');
+        $index->shouldReceive('getSettings')->andReturn([
+            'attributesToIndex' => [
+                'attribute1',
+                'attribute2',
+            ]
+        ]);
+        $index->shouldReceive('setSettings')->with([
+            'attributesToIndex' => [
+                'attribute1',
+                'attribute2',
+            ],
+            'attributesForFaceting' => [
+                'attribute1',
+                'attribute2'
+            ]
+        ]);
+        $index->shouldReceive('clearSynonyms');
+
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $realModelHelper */
+        $realModelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
+        $modelHelper = Mockery::mock('\AlgoliaSearch\Laravel\ModelHelper');
+
+        App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);
+
+        $model13 = new Model13();
+
+        $modelHelper->shouldReceive('getSettings')->andReturn($realModelHelper->getSettings($model13));
+        $modelHelper->shouldReceive('getIndices')->andReturn([$index]);
+        $modelHelper->shouldReceive('getFinalIndexName')->andReturn($realModelHelper->getFinalIndexName($model13, 'model_6_desc'));
+        $modelHelper->shouldReceive('getReplicasSettings')->andReturn($realModelHelper->getReplicasSettings($model13));
+
+        // remove warning test is done with to should receive with
+        $this->assertEquals(1, 1);
+
+        $model13->setSettings(false, true);
     }
 
     public function testSetSynonyms()
