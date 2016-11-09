@@ -402,6 +402,17 @@ To keep settings that you set on the Algolia dashboard when reindexing and setti
 Contact::reindex(true, true, true);
 ```
 
+To implement a callback that gets called everytime a batch of entities is indexed:
+
+```php
+Contact::reindex(true, true, false, function ($entities)
+{
+    foreach ($entities as $entity)
+    {
+        var_dump($entity->id); // Contact::$id
+    }
+});
+```
 
 ### Clearing an Index
 
