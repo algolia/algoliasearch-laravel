@@ -51,6 +51,8 @@ trait AlgoliaEloquentTrait
             for ($i = 0; $i < count($indices); $i++) {
                 $modelHelper->algolia->moveIndex($indicesTmp[$i]->indexName, $indices[$i]->indexName);
             }
+
+            $this->_setSettings(false); // To a setSettings to set the slave on the master
         }
     }
 
@@ -211,6 +213,13 @@ trait AlgoliaEloquentTrait
                 $index->clearSynonyms(true);
             }
 
+            // If we move the index the setSettings should not contains slave or replica.
+            if ($setToTmpIndices && $b) {
+                $b = false;
+                unset($settings['replicas']);
+                unset($settings['slaves']); // backward compatibility
+            }
+
             if (count(array_keys($settings)) > 0) {
                 // Synonyms cannot be pushed into "setSettings", it's got rejected from API and throwing exception
                 // Synonyms cannot be removed directly from $settings var, because then synonym would not be set to other indices
@@ -220,13 +229,10 @@ trait AlgoliaEloquentTrait
                 $index->setSettings($settingsWithoutSynonyms);
             }
 
-            if ($b && isset($settings['replicas'])) {
+            if ($b) {
                 $b = false;
                 unset($settings['replicas']);
-            } else if ($b && isset($settings['slaves'])) {
-                // Backward compatibility
-                $b = false;
-                unset($settings['slaves']);
+                unset($settings['slaves']); // backward compatibility
             }
         }
 
