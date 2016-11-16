@@ -89,6 +89,12 @@ class Contact extends Model
 }
 ```
 
+After setting up your model, you need to manually do the initial import of your data. You can do this by calling `reindex` on your model class. Using our previous example, this would be:
+
+```php
+Contact::reindex();
+```
+
 ### Ranking & Relevance
 
 We provide many ways to configure your index settings to tune the overall relevancy but the most important ones are the **searchable attributes** and the attributes reflecting the **record popularity**. You can configure them with the following code:
@@ -396,6 +402,17 @@ To keep settings that you set on the Algolia dashboard when reindexing and setti
 Contact::reindex(true, true, true);
 ```
 
+To implement a callback that gets called everytime a batch of entities is indexed:
+
+```php
+Contact::reindex(true, true, false, function ($entities)
+{
+    foreach ($entities as $entity)
+    {
+        var_dump($entity->id); // Contact::$id
+    }
+});
+```
 
 ### Clearing an Index
 
