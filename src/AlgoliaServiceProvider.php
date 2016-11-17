@@ -10,7 +10,7 @@ class AlgoliaServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        Version::addPrefixUserAgentSegment('Laravel integration', '1.6.2');
+        Version::addPrefixUserAgentSegment('Laravel integration', '1.7.0');
         Version::addSuffixUserAgentSegment('PHP', phpversion());
         $laravel = app();
         Version::addSuffixUserAgentSegment('Laravel', $laravel::VERSION);
