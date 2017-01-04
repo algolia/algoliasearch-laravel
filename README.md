@@ -168,7 +168,7 @@ class Contact extends Model
     use AlgoliaEloquentTrait;
 
     public $algoliaSettings = [
-        'attributesToIndex' => [
+        'searchableAttributes' => [
             'id',
             'name',
         ],
@@ -507,7 +507,7 @@ class Contact extends Model
      use AlgoliaEloquentTrait;
 
      public $algoliaSettings = [
-        'attributesToIndex' => [
+        'searchableAttributes' => [
             'id',
             'name',
         ],
