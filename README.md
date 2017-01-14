@@ -11,6 +11,9 @@ This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. 
 **Note:** If you're using Laravel 4, checkout the [algoliasearch-laravel-4](https://github.com/algolia/algoliasearch-laravel-4) repository.
 
 
+**Note:** An easier-to-read version of this documentation is available on
+[Algolia's website](https://www.algolia.com/doc/api-client/laravel/).
+
 # Table of Contents
 
 
