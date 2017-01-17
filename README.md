@@ -21,9 +21,6 @@ This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. 
 
 1. [Install via composer](#install-via-composer)
 1. [Service provider](#service-provider)
-
-**Configuration**
-
 1. [Publish vendor](#publish-vendor)
 
 **Quick Start**
@@ -98,11 +95,6 @@ Add the service provider to `config/app.php` in the `providers` array.
 ```php
 AlgoliaSearch\Laravel\AlgoliaServiceProvider::class
 ```
-
-
-# Configuration
-
-
 
 ## Publish vendor
 
