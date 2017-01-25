@@ -26,13 +26,13 @@ This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. 
 **Quick Start**
 
 1. [Quick Start](#quick-start)
-1. [Ranking &amp; Relevance](#ranking--relevance)
+1. [Ranking & Relevance](#ranking--relevance)
 1. [Frontend Search (realtime experience)](#frontend-search-realtime-experience)
 1. [Backend Search](#backend-search)
 
 **Options**
 
-1. [Auto-indexing &amp; Asynchronism](#auto-indexing--asynchronism)
+1. [Auto-indexing & Asynchronism](#auto-indexing--asynchronism)
 1. [Custom Index Name](#custom-index-name)
 1. [Per-environment Indexes](#per-environment-indexes)
 1. [Custom `objectID`](#custom-objectid)
