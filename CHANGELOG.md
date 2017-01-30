@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.7.1 (release 2017-01-31)
+- Make compatible with Laravel 5.4
+
 ## 1.1.0 (release 2016-05-03)
 
 - Add option to dynamically set `autoIndex` and/or `autoDelete` by methods in model.
