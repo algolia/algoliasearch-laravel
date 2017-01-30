@@ -2,6 +2,8 @@
 
 namespace AlgoliaSearch\Laravel;
 
+use Illuminate\Database\Eloquent\Model;
+
 class EloquentSubscriber
 {
     private $modelHelper;
@@ -11,8 +13,10 @@ class EloquentSubscriber
         $this->modelHelper = $modelHelper;
     }
 
-    public function saved($model)
+    public function saved($eventName, $payload = null)
     {
+        $model = $this->getModelFromParams($eventName, $payload);
+
         if (!$this->modelHelper->isAutoIndex($model)) {
             return true;
         }
@@ -29,8 +33,10 @@ class EloquentSubscriber
         return true;
     }
 
-    public function deleted($model)
+    public function deleted($eventName, $payload = null)
     {
+        $model = $this->getModelFromParams($eventName, $payload);
+
         if (!$this->modelHelper->isAutoDelete($model)) {
             return true;
         }
@@ -41,6 +47,23 @@ class EloquentSubscriber
         }
 
         return true;
+    }
+
+    /**
+     * @param string|Model $eventName
+     * @param array|null   $payload
+     *
+     * @return Model
+     */
+    private function getModelFromParams($eventName, $payload = null)
+    {
+        if($eventName instanceof Model) {
+            // Laravel < 5.4
+            return $eventName;
+        }
+
+        // Laravel >= 5.4
+        return $payload[0];
     }
 
     public function subscribe($events)
