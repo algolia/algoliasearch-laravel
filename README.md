@@ -7,76 +7,64 @@
 [![License](https://img.shields.io/packagist/l/algolia/algoliasearch-laravel.svg?style=flat)](https://packagist.org/packages/algolia/algoliasearch-laravel)
 
 
-This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package. PHP 5.5.9+ is supported.
+This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package.
 
 **Note:** If you're using Laravel 4, checkout the [algoliasearch-laravel-4](https://github.com/algolia/algoliasearch-laravel-4) repository.
 
 
-**Note:** An easier-to-read version of this documentation is available on
-[Algolia's website](https://www.algolia.com/doc/api-client/laravel/).
-
-# Table of Contents
 
 
-**Install**
+## API Documentation
 
-1. [Install via composer](#install-via-composer)
-1. [Service provider](#service-provider)
-1. [Publish vendor](#publish-vendor)
-
-**Quick Start**
-
-1. [Quick Start](#quick-start)
-1. [Ranking & Relevance](#ranking--relevance)
-1. [Frontend Search (realtime experience)](#frontend-search-realtime-experience)
-1. [Backend Search](#backend-search)
-
-**Options**
-
-1. [Auto-indexing & Asynchronism](#auto-indexing--asynchronism)
-1. [Custom Index Name](#custom-index-name)
-1. [Per-environment Indexes](#per-environment-indexes)
-1. [Custom `objectID`](#custom-objectid)
-1. [Restrict Indexing to a Subset of Your Data](#restrict-indexing-to-a-subset-of-your-data)
-
-**Relationships**
-
-1. [Relationships](#relationships)
-
-**Indexing**
-
-1. [Manual Indexing](#manual-indexing)
-1. [Manual Removal](#manual-removal)
-1. [Reindexing](#reindexing)
-1. [Clearing an Index](#clearing-an-index)
-
-**Manage indices**
-
-1. [Primary/Replica](#primaryreplica)
-1. [Target Multiple Indexes](#target-multiple-indexes)
-
-**Eloquent compatibility**
-
-1. [Eloquent compatibility](#eloquent-compatibility)
-1. [Compatibility](#compatibility)
+You can find the full reference on the [Algolia's website](https://www.algolia.com/doc/api-client/laravel/).
 
 
-# Guides & Tutorials
+## Table of Contents
 
-Check our [online guides](https://www.algolia.com/doc):
 
-* [Data Formatting](https://www.algolia.com/doc/indexing/formatting-your-data)
-* [Import and Synchronize data](https://www.algolia.com/doc/indexing/import-synchronize-data/php)
-* [Autocomplete](https://www.algolia.com/doc/search/auto-complete)
-* [Instant search page](https://www.algolia.com/doc/search/instant-search)
-* [Filtering and Faceting](https://www.algolia.com/doc/search/filtering-faceting)
-* [Sorting](https://www.algolia.com/doc/relevance/sorting)
-* [Ranking Formula](https://www.algolia.com/doc/relevance/ranking)
-* [Typo-Tolerance](https://www.algolia.com/doc/relevance/typo-tolerance)
-* [Geo-Search](https://www.algolia.com/doc/geo-search/geo-search-overview)
-* [Security](https://www.algolia.com/doc/security/best-security-practices)
-* [API-Keys](https://www.algolia.com/doc/security/api-keys)
-* [REST API](https://www.algolia.com/doc/rest)
+1. **[Install](#install)**
+
+    * [Install via composer](#install-via-composer)
+    * [Service provider](#service-provider)
+    * [Publish vendor](#publish-vendor)
+
+1. **[Quick Start](#quick-start)**
+
+    * [Quick Start](#quick-start)
+    * [Ranking & Relevance](#ranking--relevance)
+    * [Frontend Search (realtime experience)](#frontend-search-realtime-experience)
+    * [Backend Search](#backend-search)
+
+1. **[Options](#options)**
+
+    * [Auto-indexing & Asynchronism](#auto-indexing--asynchronism)
+    * [Custom Index Name](#custom-index-name)
+    * [Per-environment Indexes](#per-environment-indexes)
+    * [Custom `objectID`](#custom-objectid)
+    * [Restrict Indexing to a Subset of Your Data](#restrict-indexing-to-a-subset-of-your-data)
+
+1. **[Relationships](#relationships)**
+
+    * [Relationships](#relationships)
+
+1. **[Indexing](#indexing)**
+
+    * [Manual Indexing](#manual-indexing)
+    * [Manual Removal](#manual-removal)
+    * [Reindexing](#reindexing)
+    * [Clearing an Index](#clearing-an-index)
+
+1. **[Manage indices](#manage-indices)**
+
+    * [Primary/Replica](#primaryreplica)
+    * [Target Multiple Indexes](#target-multiple-indexes)
+
+1. **[Eloquent compatibility](#eloquent-compatibility)**
+
+    * [Eloquent compatibility](#eloquent-compatibility)
+    * [Compatibility](#compatibility)
+
+
 
 
 # Install
@@ -597,5 +585,6 @@ Ad::find($id)->update($attributes);
 ## Compatibility
 
 Compatible with 5.x applications
+
 
 
