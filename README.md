@@ -31,13 +31,13 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 1. **[Quick Start](#quick-start)**
 
     * [Quick Start](#quick-start)
-    * [Ranking & Relevance](#ranking--relevance)
+    * [Ranking &amp; Relevance](#ranking--relevance)
     * [Frontend Search (realtime experience)](#frontend-search-realtime-experience)
     * [Backend Search](#backend-search)
 
 1. **[Options](#options)**
 
-    * [Auto-indexing & Asynchronism](#auto-indexing--asynchronism)
+    * [Auto-indexing &amp; Asynchronism](#auto-indexing--asynchronism)
     * [Custom Index Name](#custom-index-name)
     * [Per-environment Indexes](#per-environment-indexes)
     * [Custom `objectID`](#custom-objectid)
