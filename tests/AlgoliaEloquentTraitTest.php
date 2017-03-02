@@ -173,7 +173,7 @@ class AlgoliaEloquentTraitTest extends TestCase
         $this->assertEquals(null, $model10->setSettings());
     }
 
-    public function testPushToIndexWithgetAlgoliaRecordAndIndexName()
+    public function testPushToIndexWithGetAlgoliaRecordAndIndexName()
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $realModelHelper */
         $realModelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
