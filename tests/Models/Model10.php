@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Model10 extends Model
 {
     use AlgoliaEloquentTrait;
+
     public $algoliaSettings = [
         'synonyms' => [
             [
