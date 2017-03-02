@@ -77,7 +77,7 @@ class ModelHelperTest extends TestCase
 
         $indices = $this->modelHelper->getIndices(new Model2());
 
-        $this->assertEquals(2, count($indices));
+        $this->assertCount(2, $indices);
         $this->assertEquals('index1', $indices[0]->indexName);
     }
 }
