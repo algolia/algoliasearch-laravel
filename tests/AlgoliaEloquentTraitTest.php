@@ -173,7 +173,8 @@ class AlgoliaEloquentTraitTest extends TestCase
         $this->assertEquals(null, $model10->setSettings());
     }
 
-    function testPustToIndexWithgetAlgoliaRecordAndIndexName() {
+    public function testPushToIndexWithgetAlgoliaRecordAndIndexName()
+    {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $realModelHelper */
         $realModelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
 
@@ -191,7 +192,7 @@ class AlgoliaEloquentTraitTest extends TestCase
         App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);
 
 
-        $index->shouldReceive('addObject')->times(1)->with(["is" => "working", "objectID" => null]);
+        $index->shouldReceive('addObject')->times(1)->with(['is' => 'working', 'objectID' => null]);
 
         $this->assertEquals(null, (new Model11())->pushToIndex());
     }
