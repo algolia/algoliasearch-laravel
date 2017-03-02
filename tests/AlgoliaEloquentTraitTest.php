@@ -196,9 +196,4 @@ class AlgoliaEloquentTraitTest extends TestCase
 
         $this->assertEquals(null, (new Model11())->pushToIndex());
     }
-
-    public function tearDown()
-    {
-        Mockery::close();
-    }
 }
