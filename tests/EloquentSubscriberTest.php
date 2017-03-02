@@ -5,7 +5,6 @@ namespace AlgoliaSearch\Tests;
 use AlgoliaSearch\Laravel\EloquentSubscriber;
 use AlgoliaSearch\Tests\Models\Model1;
 
-
 class EloquentSubscriberTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -57,7 +56,4 @@ class EloquentSubscriberTest extends \PHPUnit_Framework_TestCase
             ['eloquent.event', [new Model1()]], // Laravel 5.4
         ];
     }
-
-
-
 }

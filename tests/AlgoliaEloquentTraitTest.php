@@ -99,8 +99,6 @@ class AlgoliaEloquentTraitTest extends TestCase
         $this->assertEquals($modelHelper->getFinalIndexName($model12, $realModelHelper->getSettings($model12)['slaves'][0]), 'model_6_desc_testing');
 
         $model12->setSettings();
-
-
     }
 
     public function testSetSettingsMerge()
@@ -175,7 +173,8 @@ class AlgoliaEloquentTraitTest extends TestCase
         $this->assertEquals(null, $model10->setSettings());
     }
 
-    function testPustToIndexWithgetAlgoliaRecordAndIndexName() {
+    public function testPushToIndexWithGetAlgoliaRecordAndIndexName()
+    {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $realModelHelper */
         $realModelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
 
@@ -193,13 +192,8 @@ class AlgoliaEloquentTraitTest extends TestCase
         App::instance('\AlgoliaSearch\Laravel\ModelHelper', $modelHelper);
 
 
-        $index->shouldReceive('addObject')->times(1)->with(["is" => "working", "objectID" => null]);
+        $index->shouldReceive('addObject')->times(1)->with(['is' => 'working', 'objectID' => null]);
 
         $this->assertEquals(null, (new Model11())->pushToIndex());
-    }
-
-    public function tearDown()
-    {
-        Mockery::close();
     }
 }

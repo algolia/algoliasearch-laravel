@@ -14,6 +14,7 @@ class Model11 extends Model
         if ($indexName == 'model11s') {
             return ["is" => "working"];
         }
+
         return ["is not" => "working"];
     }
 }
