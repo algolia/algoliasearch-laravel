@@ -25,6 +25,7 @@ class ModelHelperTest extends TestCase
 
         $this->modelHelper = $this->app->make('\AlgoliaSearch\Laravel\ModelHelper');
     }
+
     public function testAutoIndexAndAutoDelete()
     {
         $this->assertEquals(true, $this->modelHelper->isAutoIndex(new Model1()));

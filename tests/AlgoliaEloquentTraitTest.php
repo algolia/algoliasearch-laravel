@@ -99,8 +99,6 @@ class AlgoliaEloquentTraitTest extends TestCase
         $this->assertEquals($modelHelper->getFinalIndexName($model12, $realModelHelper->getSettings($model12)['slaves'][0]), 'model_6_desc_testing');
 
         $model12->setSettings();
-
-
     }
 
     public function testSetSettingsMerge()
