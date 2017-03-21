@@ -34,7 +34,7 @@ trait AlgoliaEloquentTrait
         static::chunk(100, function ($models) use ($indicesTmp, $modelHelper, $onInsert) {
             /** @var \AlgoliaSearch\Index $index */
             foreach ($indicesTmp as $index) {
-                $records         = [];
+                $records = [];
                 $recordsAsEntity = [];
 
                 foreach ($models as $model) {
@@ -57,7 +57,7 @@ trait AlgoliaEloquentTrait
         });
 
         if ($safe) {
-            for ($i = 0; $i < count($indices); $i++) {
+            for ($i = 0; $i < count($indices); ++$i) {
                 $modelHelper->algolia->moveIndex($indicesTmp[$i]->indexName, $indices[$i]->indexName);
             }
 
@@ -163,8 +163,7 @@ trait AlgoliaEloquentTrait
 
         if ($setToTmpIndices === false) {
             $indices = $modelHelper->getIndices($this);
-        }
-        else {
+        } else {
             $indices = $modelHelper->getIndicesTmp($this);
         }
 
@@ -186,8 +185,7 @@ trait AlgoliaEloquentTrait
 
                 try {
                     $oldSettings = $old_index->getSettings();
-                }
-                catch (\Exception $e) {
+                } catch (\Exception $e) {
                     $oldSettings = [];
                 }
 
@@ -216,8 +214,7 @@ trait AlgoliaEloquentTrait
 
             if (isset($settings['synonyms'])) {
                 $index->batchSynonyms($settings['synonyms'], true, true);
-            }
-            else {
+            } else {
                 // If no synonyms are passed, clear all synonyms from index
                 $index->clearSynonyms(true);
             }
@@ -252,8 +249,9 @@ trait AlgoliaEloquentTrait
                 $s = array_merge($settings, $replicas_settings[$replica]);
                 unset($s['synonyms']);
 
-                if (count(array_keys($s)) > 0)
+                if (count(array_keys($s)) > 0) {
                     $index->setSettings($s);
+                }
             }
         }
     }
@@ -261,6 +259,7 @@ trait AlgoliaEloquentTrait
     /**
      * @param $method
      * @param $parameters
+     *
      * @return mixed
      */
     public static function __callStatic($method, $parameters)
@@ -278,6 +277,7 @@ trait AlgoliaEloquentTrait
     /**
      * @param $method
      * @param $parameters
+     *
      * @return mixed
      *
      * Catch static calls call from within a class. Example : static::method();
@@ -316,6 +316,22 @@ trait AlgoliaEloquentTrait
         return $record;
     }
 
+    public function getAlgoliaRecordBidPrice($indexName)
+    {
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
+        $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
+
+        $record = null;
+
+        $record = $this->toArray();
+
+        if (isset($record['objectID']) == false) {
+            $record['objectID'] = $modelHelper->getObjectId($this);
+        }
+
+        return $record;
+    }
+
     public function pushToIndex()
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
@@ -328,6 +344,19 @@ trait AlgoliaEloquentTrait
             if ($modelHelper->indexOnly($this, $index->indexName)) {
                 $index->addObject($this->getAlgoliaRecordDefault($index->indexName));
             }
+        }
+    }
+
+    public function pushPriceBidToIndex()
+    {
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
+        $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
+
+        $indices = $modelHelper->getIndices($this);
+
+        /** @var \AlgoliaSearch\Index $index */
+        foreach ($indices as $index) {
+            $index->addObject($this->getAlgoliaRecordBidPrice($index->indexName));
         }
     }
 
@@ -346,11 +375,11 @@ trait AlgoliaEloquentTrait
 
     public function autoIndex()
     {
-        return (property_exists($this, 'autoIndex') == false || $this::$autoIndex === true);
+        return property_exists($this, 'autoIndex') == false || $this::$autoIndex === true;
     }
 
     public function autoDelete()
     {
-        return (property_exists($this, 'autoDelete') == false || $this::$autoDelete === true);
+        return property_exists($this, 'autoDelete') == false || $this::$autoDelete === true;
     }
 }
