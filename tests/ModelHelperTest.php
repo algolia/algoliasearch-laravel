@@ -10,6 +10,7 @@ use AlgoliaSearch\Tests\Models\Model5;
 use AlgoliaSearch\Tests\Models\Model7;
 use AlgoliaSearch\Tests\Models\Model8;
 use AlgoliaSearch\Tests\Models\Model9;
+use AlgoliaSearch\Tests\Models\Model14;
 use Orchestra\Testbench\TestCase;
 
 class ModelHelperTest extends TestCase
@@ -75,6 +76,8 @@ class ModelHelperTest extends TestCase
         $this->assertEquals('test', $this->modelHelper->getIndices(new Model1(), 'test')[0]->indexName);
         $this->assertEquals('test_testing', $this->modelHelper->getIndices(new Model5(), 'test')[0]->indexName);
         $this->assertEquals('model4s', $this->modelHelper->getIndices(new Model4())[0]->indexName);
+        $this->assertEquals('test', $this->modelHelper->getIndices(new Model14())[0]->indexName);
+        $this->assertEquals('override', $this->modelHelper->getIndices(new Model14(), 'override')[0]->indexName);
 
         $indices = $this->modelHelper->getIndices(new Model2());
 
