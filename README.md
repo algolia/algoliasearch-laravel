@@ -283,7 +283,7 @@ class Contact extends Model
         return true;
     }
 
-    public static autoDelete()
+    public function autoDelete()
     {
         if (\App::environment() === 'test') {
             return false;
