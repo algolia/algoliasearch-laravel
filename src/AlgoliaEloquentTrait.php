@@ -316,6 +316,22 @@ trait AlgoliaEloquentTrait
         return $record;
     }
 
+    public function getAlgoliaRecordPriceBid($indexName)
+    {
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
+        $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
+
+        $record = null;
+
+        $record = $this->toArray();
+
+        if (isset($record['objectID']) == false) {
+            $record['objectID'] = $modelHelper->getObjectId($this);
+        }
+
+        return $record;
+    }
+
     public function pushToIndex()
     {
         /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
@@ -328,6 +344,19 @@ trait AlgoliaEloquentTrait
             if ($modelHelper->indexOnly($this, $index->indexName)) {
                 $index->addObject($this->getAlgoliaRecordDefault($index->indexName));
             }
+        }
+    }
+
+    public function pushPriceBidToIndex()
+    {
+        /** @var \AlgoliaSearch\Laravel\ModelHelper $modelHelper */
+        $modelHelper = App::make('\AlgoliaSearch\Laravel\ModelHelper');
+
+        $indices = $modelHelper->getIndices($this);
+
+        /** @var \AlgoliaSearch\Index $index */
+        foreach ($indices as $index) {
+            $index->addObject($this->getAlgoliaRecordPriceBid($index->indexName));
         }
     }
 
