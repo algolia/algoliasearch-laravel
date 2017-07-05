@@ -408,7 +408,22 @@ public function getAlgoliaRecord()
 
 # Indexing
 
+## Visibility
 
+By default, Algolia will only be able to access **visible** attributes of your model. So, for example, you will receive a `No content in PUT request` exception when using this example code, because `invisible_attribute` key returns an empty/null variable.
+
+```php
+protected $visible = ['visible_attribute', 'other_visible_attribute'];
+
+public function getAlgoliaRecord()
+{
+    return [
+        'invisible_attribute' => $this->invisible_attribute
+    ];
+}
+```
+
+Before Indexing, be sure to have correctly listed your visible attributes. To bypass this safety mask imposed by Laravel, you may use `$this->attributes['invisible_attribute']` to access directly to the attribute even if is not visible, but the recommendation is to avoid this type of access to attributes in your Model.
 
 ## Manual Indexing
 
@@ -473,7 +488,6 @@ To clear an index, use the `clearIndices` class method:
 ```ruby
 Contact::clearIndices();
 ```
-
 
 # Manage indices
 
