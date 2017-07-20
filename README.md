@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/packagist/l/algolia/algoliasearch-laravel.svg?style=flat)](https://packagist.org/packages/algolia/algoliasearch-laravel)
 
 
-This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package.
+This PHP package integrates the Algolia Search API into the Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package.
 
 **Note:** If you're using Laravel 4, checkout the [algoliasearch-laravel-4](https://github.com/algolia/algoliasearch-laravel-4) repository.
 
@@ -134,7 +134,7 @@ class Contact extends Model
 }
 ```
 
-After setting up your model, you need to manually do the initial import of your data. You can do this by calling `reindex` on your model class. Using our previous example, this would be:
+After setting up your model, you need to manually do an initial import of your data. You can do this by calling `reindex` on your model class. Using our previous example, this would be:
 
 ```php
 Contact::reindex();
@@ -142,7 +142,7 @@ Contact::reindex();
 
 ## Ranking & Relevance
 
-We provide many ways to configure your index settings to tune the overall relevancy but the most important ones are the **searchable attributes** and the attributes reflecting the **record popularity**. You can configure them with the following code:
+We provide many ways to configure your index settings to tune the overall relevancy, but the most important ones are the **searchable attributes** and the attributes reflecting the **record popularity**. You can configure them with the following code:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -164,7 +164,7 @@ class Contact extends Model
 }
 ```
 
-You can propagate (save) the settings to algolia using the `setSetting` method:
+You can propagate (save) the settings to algolia by using the `setSetting` method:
 
 ```php
 Contact::setSettings();
@@ -221,7 +221,7 @@ index.search('something', function(success, hits) {
 
 ## Backend Search
 
-You could also use the `search` method but it's not recommended to implement a instant/realtime search experience from the backend (having a frontend search gives a better user experience):
+You could also use the `search` method, but it's not recommended to implement an instant/realtime search experience from the backend (having a frontend search gives a better user experience):
 
 ```php
 Contact::search('jon doe');
@@ -236,7 +236,7 @@ Contact::search('jon doe');
 
 Each time a record is saved; it will be - asynchronously - indexed. On the other hand, each time a record is destroyed, it will be - asynchronously - removed from the index.
 
-You can disable the auto-indexing and auto-removing setting the following options:
+You can disable the auto-indexing and auto-removing by setting the following options:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -250,7 +250,7 @@ class Contact extends Model
 }
 ```
 
-You can temporary disable auto-indexing. This is often used for performance reason.
+You can temporarily disable auto-indexing. This is often done for performance reasons.
 
 ```php
 Contact::$autoIndex = false;
@@ -264,7 +264,7 @@ Contact::reindex(); // Will use batch operations.
 Contact::$autoIndex = true;
 ```
 
-You can also make a dynamic condition for those two parameters creating an `autoIndex` and/or `autoDelete method`
+You can also make a dynamic condition for those two parameters by creating an `autoIndex` and/or `autoDelete method`
 on your model
 
 ```php
@@ -294,9 +294,9 @@ class Contact extends Model
 }
 ```
 
-Be careful those two methods are defined in AlgoliaEloquentTrait.
+Be careful to define those two methods in AlgoliaEloquentTrait.
 When putting those methods in a parent class they will be "erased" by AlgoliaEloquentTrait if used in a child class
-(because of php inheritance)
+(because of php inheritance).
 
 ## Custom Index Name
 
@@ -370,7 +370,7 @@ class Contact extends Model
 
 By default the Algolia package will fetch the **loaded** relationships.
 
-If you want to index records that didn't yet load any relations you can do it by loading them in the ```getAlgoliaRecord``` that you can create in your model.
+If you want to index records that haven't yet loaded any relations, you can do it by loading them in the ```getAlgoliaRecord``` that you can create in your model.
 
 It will look like:
 
@@ -387,7 +387,7 @@ public function getAlgoliaRecord()
 }
 ```
 
-In the resulted object you will have categories converted to array by Laravel. If you want a custom relation structure you will instead do something like :
+In the resulted object, you will have categories converted to array by Laravel. If you want a custom relation structure you will instead do something like:
 
 ```php
 public function getAlgoliaRecord()
@@ -421,7 +421,7 @@ $contact->pushToIndex();
 
 ## Manual Removal
 
-And trigger the removing using the `removeFromIndex` instance method.
+And trigger the removal using the `removeFromIndex` instance method.
 
 ```php
 $contact = Contact::firstOrCreate(['name' => 'Jean']);
@@ -436,7 +436,7 @@ To *safely* reindex all your records (index to a temporary index + move the temp
 Contact::reindex();
 ```
 
-To reindex all your records (in place, without deleting out-dated records):
+To reindex all your records (in place, without deleting outdated records):
 
 ```php
 Contact::reindex(false);
@@ -448,7 +448,7 @@ To set settings during the reindexing process:
 Contact::reindex(true, true);
 ```
 
-To keep settings that you set on the Algolia dashboard when reindexing and setting settings:
+To keep settings that you set on the Algolia dashboard when reindexing and changing settings:
 
 ```php
 Contact::reindex(true, true, true);
@@ -521,7 +521,7 @@ class Contact extends Model
 }
 ```
 
-To search using a replica use the following code:
+To search using a replica, use the following code:
 
 ```php
 Book::search('foo bar', ['index' => 'contacts_desc']);
@@ -567,16 +567,15 @@ Book::search('foo bar', ['index' => 'contacts_private']);
 
 ## Eloquent compatibility
 
-Doing :
+Doing:
 
 ```php
 Ad::where('id', $id)->update($attributes);
 ```
 
-will not trigger anything in the model (so no update will happen in Algolia). This is because this is not an Eloquent call,
-it is just a convenient way to generate the query hidden behind the model
+will not trigger anything in the model (so no update will happen in Algolia). This is because it is not an Eloquent call. It is just a convenient way to generate the query hidden behind the model.
 
-To make this query work with Algolia you need to do it like that:
+To make this query work with Algolia you need to do it like this:
 
 ```php
 Ad::find($id)->update($attributes);
