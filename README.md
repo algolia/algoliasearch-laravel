@@ -283,7 +283,7 @@ class Contact extends Model
         return true;
     }
 
-    public static autoDelete()
+    public function autoDelete()
     {
         if (\App::environment() === 'test') {
             return false;
@@ -324,7 +324,7 @@ class Contact extends Model
 {
     use AlgoliaEloquentTrait;
 
-    public static $perEnvironment = true; // Index name will be 'Contacts_{\App::environnement()}';
+    public static $perEnvironment = true; // Index name will be 'Contacts_{\App::environment()}';
 }
 ```
 
