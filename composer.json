@@ -8,6 +8,9 @@
         "search",
         "api"
     ],
+    "abandoned": {
+      "algolia/algoliasearch-laravel": "laravel/scout"
+    },
     "require": {
     	"php": ">=5.5.9",
         "vinkla/algolia": "~2.0"
