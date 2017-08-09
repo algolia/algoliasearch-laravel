@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/packagist/l/algolia/algoliasearch-laravel.svg?style=flat)](https://packagist.org/packages/algolia/algoliasearch-laravel)
 
 
-This PHP package integrates the Algolia Search API into the Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package.
+This PHP package integrates the Algolia Search API to the Laravel Eloquent ORM. It's based on the [algoliasearch-client-php](https://github.com/algolia/algoliasearch-client-php) package.
 
 **Note:** If you're using Laravel 4, checkout the [algoliasearch-laravel-4](https://github.com/algolia/algoliasearch-laravel-4) repository.
 
@@ -22,209 +22,147 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 ## Table of Contents
 
 
+1. **[Algolia and Laravel Scout](#algolia-and-laravel-scout)**
+
+    * [Introducing Laravel Scout](#introducing-laravel-scout)
+    * [Regarding documentation](#regarding-documentation)
+    * [The client side of Laravel](#the-client-side-of-laravel)
+    * [Looking for the legacy package?](#looking-for-the-legacy-package?)
+
 1. **[Install](#install)**
 
-    * [Install via composer](#install-via-composer)
-    * [Service provider](#service-provider)
-    * [Publish vendor](#publish-vendor)
+    * [Install the algolia/scout package](#install-the-algoliascout-package)
+    * [Enabling scout](#enabling-scout)
+    * [Configuring scout](#configuring-scout)
+    * [Configure API Keys](#configure-api-keys)
 
-1. **[Quick Start](#quick-start)**
+1. **[Indexing](#indexing)**
 
-    * [Quick Start](#quick-start)
-    * [Ranking &amp; Relevance](#ranking--relevance)
-    * [Frontend Search (realtime experience)](#frontend-search-realtime-experience)
-    * [Backend Search](#backend-search)
+    * [Indexing](#indexing)
+    * [Manual indexing](#manual-indexing)
+    * [Customizing records](#customizing-records)
 
 1. **[Options](#options)**
 
-    * [Auto-indexing &amp; Asynchronism](#auto-indexing--asynchronism)
-    * [Custom Index Name](#custom-index-name)
-    * [Per-environment Indexes](#per-environment-indexes)
+    * [Custom index name](#custom-index-name)
     * [Custom `objectID`](#custom-objectid)
-    * [Restrict Indexing to a Subset of Your Data](#restrict-indexing-to-a-subset-of-your-data)
+    * [Pause indexing](#pause-indexing)
 
 1. **[Relationships](#relationships)**
 
     * [Relationships](#relationships)
 
-1. **[Indexing](#indexing)**
+1. **[Managing Settings](#managing-settings)**
 
-    * [Manual Indexing](#manual-indexing)
-    * [Manual Removal](#manual-removal)
-    * [Reindexing](#reindexing)
-    * [Clearing an Index](#clearing-an-index)
+    * [Settings](#settings)
 
-1. **[Manage indices](#manage-indices)**
+1. **[Managing Replicas](#managing-replicas)**
 
-    * [Primary/Replica](#primaryreplica)
-    * [Target Multiple Indexes](#target-multiple-indexes)
+    * [Settings replicas](#settings-replicas)
+    * [Using replicas](#using-replicas)
 
 1. **[Eloquent compatibility](#eloquent-compatibility)**
 
     * [Eloquent compatibility](#eloquent-compatibility)
-    * [Compatibility](#compatibility)
+
+1. **[Extending Laravel Scout](#extending-laravel-scout)**
+
+    * [Introduction](#introduction)
+    * [Using the search callback](#using-the-search-callback)
+    * [Using macros](#using-macros)
+    * [Extending Algolia’s driver](#extending-algolia’s-driver)
 
 
 
+
+
+# Algolia and Laravel Scout
+
+
+
+## Regarding documentation
+
+Laravel has written [excellent online documentation](https://laravel.com/docs/5.4/scout)
+to go along with its release of Scout. They go into great detail on how to use the
+Scout interface. Additionally, there are [Laracasts](https://laracasts.com/series/search-as-a-service)
+that can help you get started with Scout and Algolia. These resources should be
+sufficient not only to help you get started, but to implement Algolia in the best
+possible way within the Laravel framework.
+
+One of our goals here is to complement Laravel's documentation by anticipating
+questions you might have after reading Laravel's documentation. We touch on some
+of the same material, adding our point of view to such subjects as
+[installation](/doc/api-client/laravel/install/), [managing indices](/doc/api-client/laravel/indexing/),
+and others.
+
+Of equal interest, we show you how to [extend Scout](/doc/api-client/laravel/extending-scout/)
+with callbacks and extended devices, and how to use the [Macros](#using-macros)
+we have written to simplify your code. We also provide [tutorials](/doc/tutorials/getting-started/getting-started-with-laravel-scout-vuejs/) that showcase
+special use cases, like geo-awareness.
+
+## The client side of Laravel
+
+Putting aside data indexing operations, which are done on your servers, we recommend
+that your search operations be done directly on the client-side, using JavaScript.
+This will significantly improve your search response times, and reduce the load and traffic on your servers.
+
+Both Laravel and Algolia make working with JavaScript easy, with or without a JS framework.
+We will show you how to quickly build rich UIs, by taking you through our
+[instant search package](https://community.algolia.com/instantsearch.js/v2/),
+which is a full UI solution with versions for Vue JS, React JS, and simple native JS.
+Once plugged in, instant search will give your website immediate access to such
+features (or [widgets](https://community.algolia.com/instantsearch.js/v2/widgets.html))
+as formatted results, filtering & faceting, pagination, infinite scrolling, and many other UI components.
+
+``
 
 # Install
 
 
 
-## Install via composer
-Add `algolia/algoliasearch-laravel` to your `composer.json` file:
+## Enabling scout
 
-```bash
-composer require algolia/algoliasearch-laravel
-```
+If you use Laravel 5.5, the package will be discovered automatically.
 
-## Service provider
-Add the service provider to `config/app.php` in the `providers` array.
+If you use a version <5.5, the service provider should be added to the `providers` array in the `config/app.php` file.
 
 ```php
-AlgoliaSearch\Laravel\AlgoliaServiceProvider::class
+Laravel\Scout\ScoutServiceProvider::class,
 ```
 
-## Publish vendor
+## Configuring scout
 
-Laravel Algolia requires a connection configuration. To get started, you'll need to publish all vendor assets:
-
-```bash
-php artisan vendor:publish
-```
-
-You can add the ```--provider="Vinkla\Algolia\AlgoliaServiceProvider"``` option to only publish assets of the Algolia package.
-
-This will create a `config/algolia.php` file in your app that you can modify to set your configuration. Also, make sure you check for changes compared to the original config file after an upgrade.
-
-
-# Quick Start
-
-
-
-## Quick Start
-
-The following code adds search capabilities to your `Contact` model creating a `Contact` index:
+Finally, you will need to publish the configuration file. This command will create a `scout.php` configuration file in your config directory.
 
 ```php
-use Illuminate\Database\Eloquent\Model;
-use AlgoliaSearch\Laravel\AlgoliaEloquentTrait;
-
-class Contact extends Model
-{
-    use AlgoliaEloquentTrait;
-}
+php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
 ```
 
-By default all visible attributes are sent. If you want to send specific attributes you can do something like:
 
-```php
-use Illuminate\Database\Eloquent\Model;
+# Indexing
 
-class Contact extends Model
-{
-    use AlgoliaEloquentTrait;
 
-    public function getAlgoliaRecord()
-    {
-        return array_merge($this->toArray(), [
-            'custom_name' => 'Custom Name'
-        ]);
-    }
-}
+
+## Manual indexing
+
+The following section only works with classes using the `Laravel\Scout\Searchable` trait.
+
+### Indexing
+
+When setting up Laravel Scout, you probably have existing data that you would like to import. There is an artisan command to import data. The command takes a model as parameter, so it has to be launched for each model class.
+
+```
+php artisan scout:import "App\Contact"
 ```
 
-After setting up your model, you need to manually do an initial import of your data. You can do this by calling `reindex` on your model class. Using our previous example, this would be:
+### Flushing and clearing
 
-```php
-Contact::reindex();
+A similar command exists to flush the data from Algolia's index. It's important to note that the `flush` command only deletes data existing in your local database. It doesn't clear the index.
+
+For instance, if you indexed data that you manually deleted from your local database, the flush command will not be able to delete them. In this case it's better to clear the index from your Algolia dashboad.
+
 ```
-
-## Ranking & Relevance
-
-We provide many ways to configure your index settings to tune the overall relevancy, but the most important ones are the **searchable attributes** and the attributes reflecting the **record popularity**. You can configure them with the following code:
-
-```php
-use Illuminate\Database\Eloquent\Model;
-
-class Contact extends Model
-{
-    use AlgoliaEloquentTrait;
-
-    public $algoliaSettings = [
-        'searchableAttributes' => [
-            'id',
-            'name',
-        ],
-        'customRanking' => [
-            'desc(popularity)',
-            'asc(name)',
-        ],
-    ];
-}
-```
-
-You can propagate (save) the settings to algolia by using the `setSetting` method:
-
-```php
-Contact::setSettings();
-```
-
-#### Synonyms
-
-Synonyms are used to tell the engine about words or expressions that should be considered equal in regard to the textual relevance.
-
-Our [synonyms API](https://www.algolia.com/doc/relevance/synonyms) has been designed to manage as easily as possible a large set of synonyms for an index and its replicas.
-
-You can use the synonyms API by adding a `synonyms` in `$algoliaSettings` class property like this:
-
-```php
-use Illuminate\Database\Eloquent\Model;
-
-class Contact extends Model
-{
-    use AlgoliaEloquentTrait;
-
-    public $algoliaSettings = [
-        'synonyms' => [
-            [
-                'objectID' => 'red-color',
-                'type'     => 'synonym',
-                'synonyms' => ['red', 'another red', 'yet another red']
-            ]
-        ]
-    ];
-}
-```
-
-You can propagate (save) the settings to algolia using the `setSetting` method:
-
-```php
-Contact::setSettings();
-```
-
-## Frontend Search (realtime experience)
-
-Traditional search implementations tend to have search logic and functionality on the backend. This made sense when the search experience consisted of a user entering a search query, executing that search, and then being redirected to a search result page.
-
-Implementing search on the backend is no longer necessary. In fact, in most cases it is harmful to performance because of the extra network and processing latency. We highly recommend the usage of our [JavaScript API Client](https://github.com/algolia/algoliasearch-client-javascript) issuing all search requests directly from the end user's browser, mobile device, or client. It will reduce the overall search latency while offloading your servers at the same time.
-
-In your JavaScript code you can do:
-
-```js
-var client = algoliasearch('ApplicationID', 'Search-Only-API-Key');
-var index = client.initIndex('YourIndexName');
-index.search('something', function(success, hits) {
-  console.log(success, hits)
-}, { hitsPerPage: 10, page: 0 });
-```
-
-## Backend Search
-
-You could also use the `search` method, but it's not recommended to implement an instant/realtime search experience from the backend (having a frontend search gives a better user experience):
-
-```php
-Contact::search('jon doe');
+php artisan scout:flush "App\Contact"
 ```
 
 
@@ -232,133 +170,31 @@ Contact::search('jon doe');
 
 
 
-## Auto-indexing & Asynchronism
-
-Each time a record is saved; it will be - asynchronously - indexed. On the other hand, each time a record is destroyed, it will be - asynchronously - removed from the index.
-
-You can disable the auto-indexing and auto-removing by setting the following options:
-
-```php
-use Illuminate\Database\Eloquent\Model;
-
-class Contact extends Model
-{
-    use AlgoliaEloquentTrait;
-
-    public static $autoIndex = false;
-    public static $autoDelete = false;
-}
-```
-
-You can temporarily disable auto-indexing. This is often done for performance reasons.
-
-```php
-Contact::$autoIndex = false;
-Contact::clearIndices();
-
-for ($i = 0; $i < 10000; $i++) {
-    $contact = Contact::firstOrCreate(['name' => 'Jean']);
-}
-
-Contact::reindex(); // Will use batch operations.
-Contact::$autoIndex = true;
-```
-
-You can also make a dynamic condition for those two parameters by creating an `autoIndex` and/or `autoDelete method`
-on your model
-
-```php
-use Illuminate\Database\Eloquent\Model;
-
-class Contact extends Model
-{
-    use AlgoliaEloquentTrait;
-
-    public function autoIndex()
-    {
-        if (\App::environment() === 'test') {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static autoDelete()
-    {
-        if (\App::environment() === 'test') {
-            return false;
-        }
-
-        return true;
-    }
-}
-```
-
-Be careful to define those two methods in AlgoliaEloquentTrait.
-When putting those methods in a parent class they will be "erased" by AlgoliaEloquentTrait if used in a child class
-(because of php inheritance).
-
-## Custom Index Name
-
-By default, the index name will be the pluralized class name, e.g. "Contacts". You can customize the index name by using the `$indices` option:
-
-```php
-use Illuminate\Database\Eloquent\Model;
-
-class Contact extends Model
-{
-    use AlgoliaEloquentTrait;
-
-    public $indices = ['contact_all'];
-}
-```
-
-## Per-environment Indexes
-
-You can suffix the index name with the current App environment using the following option:
-
-```php
-use Illuminate\Database\Eloquent\Model;
-
-class Contact extends Model
-{
-    use AlgoliaEloquentTrait;
-
-    public static $perEnvironment = true; // Index name will be 'Contacts_{\App::environnement()}';
-}
-```
-
 ## Custom `objectID`
 
-By default, the `objectID` is based on your record's `keyName` (`id` by default). You can change this behavior specifying the `objectIdKey` option (be sure to use a uniq field).
+Scout needs the `objectID` to be the primary key of your model. This is required because Laravel use the `objectID` to build a model collection when retrieving data.
+
+If you want to modify the primary key of your model, you can refer to the [official docs](https://laravel.com/docs/5.4/eloquent#eloquent-model-conventions).
+
+In the following example we define the `username` of a Contact as the primary key, so it will become the `objectID` in Algolia's index.
 
 ```php
+<?php
+
+namespace App;
+
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-    use AlgoliaEloquentTrait;
+    use Searchable;
 
-    public static $objectIdKey = 'new_key';
+    public $primaryKey = 'username';
+
+    public $incrementing = false;
 }
-```
 
-## Restrict Indexing to a Subset of Your Data
-
-You can add constraints controlling if a record must be indexed by defining the `indexOnly()` method.
-
-```php
-use Illuminate\Database\Eloquent\Model;
-
-class Contact extends Model
-{
-    use AlgoliaEloquentTrait;
-
-    public function indexOnly($index_name)
-    {
-        return (bool) $condition;
-    }
-}
 ```
 
 
@@ -368,197 +204,97 @@ class Contact extends Model
 
 ## Relationships
 
-By default the Algolia package will fetch the **loaded** relationships.
+By default the scout package will fetch the **loaded** relationships.
 
-If you want to index records that haven't yet loaded any relations, you can do it by loading them in the ```getAlgoliaRecord``` that you can create in your model.
+If you want to index records that haven't yet loaded any relations you can do it by loading them in
+the ```toSearchableArray``` which you can override in your model.
 
 It will look like:
 
 ```php
-public function getAlgoliaRecord()
+public function toSearchableArray()
 {
-    /**
-     * Load the categories relation so that it's available
-     *  in the laravel toArray method
-     */
-    $this->categories;
+  /**
+   * Load the categories relation so that it's available
+   *  in the laravel toArray method
+   */
+  $this->categories;
 
-   return $this->toArray();
+  return $this->toArray();
 }
 ```
 
-In the resulted object, you will have categories converted to array by Laravel. If you want a custom relation structure you will instead do something like:
+In the resulting object, you will have categories converted to an array by Laravel.
+If you want a custom relation structure, you will instead do something like this:
 
 ```php
-public function getAlgoliaRecord()
+public function toSearchableArray()
 {
-    /**
-     * Load the categories relation so that it's available
-     *  in the laravel toArray method
-     */
-    $extra_data = [];
-    $extra_data['categories'] = array_map(function ($data) {
-                                        return $data['name'];
-                                }, $this->categories->toArray());
+    $array = $this->toArray();
 
-   return array_merge($this->toArray(), $extra_data);
+    $array['categories'] = $this->categories->map(function ($data) {
+                             return $data['name'];
+                           })->toArray();
+
+   return $array;
 }
 ```
 
 
-# Indexing
+# Managing Settings
 
 
 
-## Manual Indexing
+## Settings
 
-You can trigger indexing using the `pushToIndex` instance method.
+If you are using Laravel Scout, we recommend changing all settings through the dashboard
+and to use this package to backup and restore your settings.
+
+The package will export all your settings for each index into a separate JSON file.
+The data are saved in `resources/settings/<indice_name>.json`, which make it easy
+to version.
+
+**Warning:** Export all your [Algolia settings](https://github.com/algolia/laravel-scout-algolia-macros) into your project and push them back.
+
+### Install
+
+The `algolia/laravel-scout-settings` package requires the Algolia PHP client and
+Laravel Scout. Note that Laravel Scout is only required to retrieve the Algolia
+configuration.
+
+```
+composer require algolia/laravel-scout-settings
+```
+
+If you use Laravel 5.5, the package will be discovered automatically.
+If you don't, the service provider should be added to the `providers` array in
+`config/app.php` file.
 
 ```php
-$contact = Contact::firstOrCreate(['name' => 'Jean']);
-$contact->pushToIndex();
+Algolia\Settings\ServiceProvider::class,
 ```
 
-## Manual Removal
+### How to use
 
-And trigger the removal using the `removeFromIndex` instance method.
+The package provides two new commands, one to export the settings from Algolia API and the other
+to restore them.
 
-```php
-$contact = Contact::firstOrCreate(['name' => 'Jean']);
-$contact->removeFromIndex();
+Just like the Laravel Scout import command, you have to provide a model for both commands
+
+```
+php artisan algolia:settings:backup App\Contact
+// will save settings to resources/algolia-settings/contacts.json
 ```
 
-## Reindexing
-
-To *safely* reindex all your records (index to a temporary index + move the temporary index to the current one atomically), use the `reindex` class method:
-
-```php
-Contact::reindex();
 ```
-
-To reindex all your records (in place, without deleting outdated records):
-
-```php
-Contact::reindex(false);
-```
-
-To set settings during the reindexing process:
-
-```php
-Contact::reindex(true, true);
-```
-
-To keep settings that you set on the Algolia dashboard when reindexing and changing settings:
-
-```php
-Contact::reindex(true, true, true);
-```
-
-To implement a callback that gets called everytime a batch of entities is indexed:
-
-```php
-Contact::reindex(true, true, false, function ($entities)
-{
-    foreach ($entities as $entity)
-    {
-        var_dump($entity->id); // Contact::$id
-    }
-});
-```
-
-## Clearing an Index
-
-To clear an index, use the `clearIndices` class method:
-
-```ruby
-Contact::clearIndices();
+php artisan algolia:settings:push App\Contact
+// will push settings from resources/algolia-settings/contacts.json to Algolia contacts index
 ```
 
 
-# Manage indices
+# Managing Replicas
 
 
-
-## Primary/Replica
-
-You can define replica indexes using the `$algolia_settings` variable:
-
-```php
-use Illuminate\Database\Eloquent\Model;
-
-class Contact extends Model
-{
-     use AlgoliaEloquentTrait;
-
-     public $algoliaSettings = [
-        'searchableAttributes' => [
-            'id',
-            'name',
-        ],
-        'customRanking' => [
-            'desc(popularity)',
-            'asc(name)',
-        ],
-        'replicas' => [
-            'contacts_desc',
-        ],
-    ];
-
-    public $replicasSettings = [
-        'contacts_desc' => [
-            'ranking' => [
-                'desc(name)',
-                'typo',
-                'geo',
-                'words',
-                'proximity',
-                'attribute',
-                'exact',
-                'custom'
-            ]
-        ]
-    ];
-}
-```
-
-To search using a replica, use the following code:
-
-```php
-Book::search('foo bar', ['index' => 'contacts_desc']);
-```
-
-## Target Multiple Indexes
-
-You can index a record in several indexes using the <code>$indices</code> property:
-
-```php
-use Illuminate\Database\Eloquent\Model;
-
-class Contact extends Model
-{
-    use AlgoliaEloquentTrait;
-
-    public $indices = [
-        'contact_public',
-        'contact_private',
-    ];
-
-    public function indexOnly($indexName)
-    {
-        if ($indexName == 'contact_public')
-            return true;
-
-        return $this->private;
-    }
-
-}
-```
-
-To search using an extra index, use the following code:
-
-```php
-Book::search('foo bar', ['index' => 'contacts_private']);
-```
 
 
 # Eloquent compatibility
@@ -570,20 +306,116 @@ Book::search('foo bar', ['index' => 'contacts_private']);
 Doing:
 
 ```php
-Ad::where('id', $id)->update($attributes);
+MyModel::where('id', $id)->update($attributes);
 ```
 
-will not trigger anything in the model (so no update will happen in Algolia). This is because it is not an Eloquent call. It is just a convenient way to generate the query hidden behind the model.
+will not trigger anything in the model (so no update will happen in Algolia). This is because it is not an Eloquent call,
+it is just a convenient way to generate the query hidden behind the model.
 
-To make this query work with Algolia you need to do it like this:
+To make this query work with Algolia you need to transform the query like this:
 
 ```php
-Ad::find($id)->update($attributes);
+MyModel::find($id)->update($attributes);
 ```
 
-## Compatibility
 
-Compatible with 5.x applications
+# Extending Laravel Scout
+
+
+
+## Using the search callback
+
+When searching, you can pass a callback function as a second parameter to the `search()` method.
+
+Thus, instead of executing a regular query to Algolia, the callback is executed. This is useful if you want to pass more parameters,
+or override the query string.
+
+The `AlgoliaEngine` class defines a `performSearch()` method which is reponsible for calling
+Algolia. This is where the callback becomes useful.
+
+In the following example we add the user location to sort results per proximity.
+
+```php
+$lat, $lng = Auth::user()->someMethodToGetUsersLocation();
+
+Airport::search('', function ($algolia, $query, $options) use ($lat, $lng) {
+
+  $options['aroundLatLng'] = (float) $lat . ',' . (float) $lng;
+
+  return $algolia->search($query, $options);
+});
+```
+
+| Variable name 	| Class               	| Description                                                                                                                                      	|
+|-	|	|------	|
+| `$algolia`    	| AlgoliaSearch\Index 	| The Indexer from Algolia's client, used to contact the API.                                                                                      	|
+| `$query`      	| String              	| The search query string                                                                                                                          	|
+| `$options`    	| Array               	| The options that will be passed along with the query (see [search parameters documentation](https://www.algolia.com/doc/api-client/php/search/#search-parameters)) 	|
+
+In the following example we search in the facet values instead of the records.
+
+```php
+// Expecting to find a Chipotle restaurant in the facets
+Airport::search('dining:chip', function ($algolia, $query, $options) {
+
+  $facetParams = explode(':', $query);
+
+  return $algolia->searchForFacetValues($facetParams[0], $facetParams[1]);
+});
+```
+
+## Using macros
+
+The `Builder` class uses the `Macroable` trait from the Laravel framework, which allows
+you to add methods to the class, without extending it. Macros often take advantage of the callback functionality described earlier. They help avoiding code duplication.
+
+We maintain a package with a few [algolia-specific macros](https://github.com/algolia/laravel-scout-algolia-macros).
+
+Macros are typically defined in a ServiceProvider class. If you have only a few, you can add them to your
+`App\Providers\AppServiceProvider`. Otherwise you can create a `App\Providers\ScoutMacrosServiceProvider`
+and add it to the `providers` array in `config/app.php`.
+
+### Example
+
+In this section, we will add a `count` method to the Scout builder. It will allow you to get the number
+of hits directly from Algolia's raw result, before it's converted to a collection of models.
+
+```php
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Laravel\Scout\Builder;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+      if (! Builder::hasMacro('count')) {
+
+          Builder::macro('count', function () {
+              $raw = $this->engine()->search($this);
+
+              return (int) $raw['nbHits'];
+          });
+
+        }
+    }
+}
+
+```
+
+Then, you will be able to chain the `count` method directly after `search`.
+
+```php
+Contact::search('jeff')->count();
+```
 
 
 
