@@ -1,6 +1,12 @@
-# Algolia Search API Client for Laravel
+# [DEPRECATED] Algolia Search API Client for Laravel
 
 [Algolia Search](https://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
+
+---
+
+**This package is deprecated, we recommend you to use [Laravel Scout](https://laravel.com/docs/5.4/scout)**. If you want to extend Scout capabilities, please refer to [our dedicated documentation](https://www.algolia.com/doc/api-client/laravel/algolia-and-scout/)
+
+---
 
 [![Build Status](https://img.shields.io/travis/algolia/algoliasearch-laravel/master.svg?style=flat)](https://travis-ci.org/algolia/algoliasearch-laravel)
 [![Latest Version](https://img.shields.io/github/release/algolia/algoliasearch-laravel.svg?style=flat)](https://github.com/algolia/algoliasearch-laravel/releases)
