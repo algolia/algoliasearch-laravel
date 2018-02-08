@@ -150,15 +150,9 @@ class ModelHelper
         return [$this->getIndexName($model)];
     }
 
-    public function getIndicesTmp(Model $model)
+    public function getIndicesTmp(Model $model, $indexName = null)
     {
-        $indicesName = [];
-
-        if (property_exists($model, 'indices') && is_array($model->indices)) {
-            $indicesName = $model->indices;
-        } else {
-            $indicesName[] = $this->getIndexName($model);
-        }
+        $indicesName = $this->buildIndices($model, $indexName);
 
         $indices = array_map(function ($index_name) use ($model) {
             return $this->algolia->initIndex($this->getFinalIndexName($model, $index_name).'_tmp');

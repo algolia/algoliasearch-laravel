@@ -84,4 +84,20 @@ class ModelHelperTest extends TestCase
         $this->assertCount(2, $indices);
         $this->assertEquals('index1', $indices[0]->indexName);
     }
+
+    public function testGetIndicesTmp()
+    {
+        $this->assertEquals('model1s_tmp', $this->modelHelper->getIndicesTmp(new Model1())[0]->indexName);
+        $this->assertEquals('model5s_testing_tmp', $this->modelHelper->getIndicesTmp(new Model5())[0]->indexName);
+        $this->assertEquals('test_tmp', $this->modelHelper->getIndicesTmp(new Model1(), 'test')[0]->indexName);
+        $this->assertEquals('test_testing_tmp', $this->modelHelper->getIndicesTmp(new Model5(), 'test')[0]->indexName);
+        $this->assertEquals('model4s_tmp', $this->modelHelper->getIndicesTmp(new Model4())[0]->indexName);
+        $this->assertEquals('test_tmp', $this->modelHelper->getIndicesTmp(new Model14())[0]->indexName);
+        $this->assertEquals('override_tmp', $this->modelHelper->getIndicesTmp(new Model14(), 'override')[0]->indexName);
+
+        $indicesTmp = $this->modelHelper->getIndicesTmp(new Model2());
+
+        $this->assertCount(2, $indicesTmp);
+        $this->assertEquals('index1_tmp', $indicesTmp[0]->indexName);
+    }
 }
